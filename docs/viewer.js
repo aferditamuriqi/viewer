@@ -3,18 +3,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -35,584 +35,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define("Annotator", ["require", "exports"], function (require, exports) {
     "use strict";
-});
-define("Store", ["require", "exports"], function (require, exports) {
-    "use strict";
-});
-define("MemoryStore", ["require", "exports"], function (require, exports) {
-    "use strict";
-    /** Class that stores key/value pairs in memory. */
-    var MemoryStore = (function () {
-        function MemoryStore() {
-            this.store = {};
-        }
-        MemoryStore.prototype.get = function (key) {
-            var value = this.store[key] || null;
-            return new Promise(function (resolve) { return resolve(value); });
-        };
-        MemoryStore.prototype.set = function (key, value) {
-            this.store[key] = value;
-            return new Promise(function (resolve) { return resolve(); });
-        };
-        return MemoryStore;
-    }());
     Object.defineProperty(exports, "__esModule", { value: true });
-    /** Class that stores key/value pairs in memory. */
-    exports.default = MemoryStore;
 });
-define("LocalStorageStore", ["require", "exports", "MemoryStore"], function (require, exports, MemoryStore_1) {
+define("BookFont", ["require", "exports"], function (require, exports) {
     "use strict";
-    /** Class that stores key/value pairs in localStorage if possible
-        but falls back to an in-memory store. */
-    var LocalStorageStore = (function () {
-        function LocalStorageStore(config) {
-            this.prefix = config.prefix;
-            try {
-                // In some browsers (eg iOS Safari in private mode), 
-                // localStorage exists but throws an exception when
-                // you try to write to it.
-                var testKey = config.prefix + "-" + String(Math.random());
-                window.localStorage.setItem(testKey, "test");
-                window.localStorage.removeItem(testKey);
-                this.fallbackStore = null;
-            }
-            catch (e) {
-                this.fallbackStore = new MemoryStore_1.default();
-            }
-        }
-        LocalStorageStore.prototype.getLocalStorageKey = function (key) {
-            return this.prefix + "-" + key;
-        };
-        LocalStorageStore.prototype.get = function (key) {
-            return __awaiter(this, void 0, void 0, function () {
-                var value;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            value = null;
-                            if (!!this.fallbackStore)
-                                return [3 /*break*/, 1];
-                            value = window.localStorage.getItem(this.getLocalStorageKey(key));
-                            return [3 /*break*/, 3];
-                        case 1: return [4 /*yield*/, this.fallbackStore.get(key)];
-                        case 2:
-                            value = _a.sent();
-                            _a.label = 3;
-                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(value); })];
-                    }
-                });
-            });
-        };
-        LocalStorageStore.prototype.set = function (key, value) {
-            return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!!this.fallbackStore)
-                                return [3 /*break*/, 1];
-                            window.localStorage.setItem(this.getLocalStorageKey(key), value);
-                            return [3 /*break*/, 3];
-                        case 1: return [4 /*yield*/, this.fallbackStore.set(key, value)];
-                        case 2:
-                            _a.sent();
-                            _a.label = 3;
-                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                    }
-                });
-            });
-        };
-        return LocalStorageStore;
-    }());
     Object.defineProperty(exports, "__esModule", { value: true });
-    /** Class that stores key/value pairs in localStorage if possible
-        but falls back to an in-memory store. */
-    exports.default = LocalStorageStore;
-});
-define("Cacher", ["require", "exports"], function (require, exports) {
-    "use strict";
-    (function (CacheStatus) {
-        /** The book has not been cached. */
-        CacheStatus[CacheStatus["Uncached"] = 0] = "Uncached";
-        /** There is a new version available (Application Cache only - refresh the page to update). */
-        CacheStatus[CacheStatus["UpdateAvailable"] = 1] = "UpdateAvailable";
-        /** The app is checking for a new version (Application Cache only). */
-        CacheStatus[CacheStatus["CheckingForUpdate"] = 2] = "CheckingForUpdate";
-        /** The cache is downloading. */
-        CacheStatus[CacheStatus["Downloading"] = 3] = "Downloading";
-        /** The cache is fully downloaded and the book is available offline. */
-        CacheStatus[CacheStatus["Downloaded"] = 4] = "Downloaded";
-        /** There was an error downloading the cache, and the book is not available offline. */
-        CacheStatus[CacheStatus["Error"] = 5] = "Error";
-    })(exports.CacheStatus || (exports.CacheStatus = {}));
-    var CacheStatus = exports.CacheStatus;
-});
-define("Manifest", ["require", "exports"], function (require, exports) {
-    "use strict";
-    var Manifest = (function () {
-        function Manifest(manifestJSON, manifestUrl) {
-            this.metadata = manifestJSON.metadata || {};
-            this.links = manifestJSON.links || [];
-            this.readingOrder = manifestJSON.spine || [];
-            this.resources = manifestJSON.resources || [];
-            this.toc = manifestJSON.toc || [];
-            this.manifestUrl = manifestUrl;
-        }
-        Manifest.getManifest = function (manifestUrl, store) {
-            return __awaiter(this, void 0, void 0, function () {
-                var _this = this;
-                var fetchManifest, tryToUpdateManifestButIgnoreResult, manifestString, manifestJSON;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            fetchManifest = function () { return __awaiter(_this, void 0, void 0, function () {
-                                var response, manifestJSON;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4 /*yield*/, window.fetch(manifestUrl.href)];
-                                        case 1:
-                                            response = _a.sent();
-                                            return [4 /*yield*/, response.json()];
-                                        case 2:
-                                            manifestJSON = _a.sent();
-                                            if (!store)
-                                                return [3 /*break*/, 4];
-                                            return [4 /*yield*/, store.set("manifest", JSON.stringify(manifestJSON))];
-                                        case 3:
-                                            _a.sent();
-                                            _a.label = 4;
-                                        case 4: return [2 /*return*/, new Manifest(manifestJSON, manifestUrl)];
-                                    }
-                                });
-                            }); };
-                            tryToUpdateManifestButIgnoreResult = function () { return __awaiter(_this, void 0, void 0, function () {
-                                var err_1;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            _a.trys.push([0, 2, , 3]);
-                                            return [4 /*yield*/, fetchManifest()];
-                                        case 1:
-                                            _a.sent();
-                                            return [3 /*break*/, 3];
-                                        case 2:
-                                            err_1 = _a.sent();
-                                            return [3 /*break*/, 3];
-                                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                                    }
-                                });
-                            }); };
-                            if (!store)
-                                return [3 /*break*/, 2];
-                            return [4 /*yield*/, store.get("manifest")];
-                        case 1:
-                            manifestString = _a.sent();
-                            if (manifestString) {
-                                // Kick off a fetch to update the store for next time,
-                                // but don't await it.
-                                tryToUpdateManifestButIgnoreResult();
-                                manifestJSON = JSON.parse(manifestString);
-                                return [2 /*return*/, new Manifest(manifestJSON, manifestUrl)];
-                            }
-                            _a.label = 2;
-                        case 2: return [2 /*return*/, fetchManifest()];
-                    }
-                });
-            });
-        };
-        Manifest.prototype.getStartLink = function () {
-            if (this.readingOrder.length > 0) {
-                return this.readingOrder[0];
-            }
-            return null;
-        };
-        Manifest.prototype.getPreviousSpineItem = function (href) {
-            var index = this.getSpineIndex(href);
-            if (index !== null && index > 0) {
-                return this.readingOrder[index - 1];
-            }
-            return null;
-        };
-        Manifest.prototype.getNextSpineItem = function (href) {
-            var index = this.getSpineIndex(href);
-            if (index !== null && index < (this.readingOrder.length - 1)) {
-                return this.readingOrder[index + 1];
-            }
-            return null;
-        };
-        Manifest.prototype.getSpineItem = function (href) {
-            var index = this.getSpineIndex(href);
-            if (index !== null) {
-                return this.readingOrder[index];
-            }
-            return null;
-        };
-        Manifest.prototype.getSpineIndex = function (href) {
-            for (var index = 0; index < this.readingOrder.length; index++) {
-                var item = this.readingOrder[index];
-                if (item.href) {
-                    var itemUrl = new URL(item.href, this.manifestUrl.href).href;
-                    if (itemUrl === href) {
-                        return index;
-                    }
-                }
-            }
-            return null;
-        };
-        Manifest.prototype.getTOCItem = function (href) {
-            var _this = this;
-            var findItem = function (href, links) {
-                for (var index = 0; index < links.length; index++) {
-                    var item = links[index];
-                    if (item.href) {
-                        var itemUrl = new URL(item.href, _this.manifestUrl.href).href;
-                        if (itemUrl === href) {
-                            return item;
-                        }
-                    }
-                    if (item.children) {
-                        var childItem = findItem(href, item.children);
-                        if (childItem !== null) {
-                            return childItem;
-                        }
-                    }
-                }
-                return null;
-            };
-            return findItem(href, this.toc);
-        };
-        return Manifest;
-    }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Manifest;
-});
-define("ApplicationCacheCacher", ["require", "exports", "Cacher"], function (require, exports, Cacher_1) {
-    "use strict";
-    /** Class that caches files using the (deprecated) application cache API.
-        This is necessary until Service Worker support improves.
-        
-        This class expects the application to have a cache manifest file
-        containing the application files (currently index.html, sw.js, fetch.js,
-        and webpub-viewer.js), and all the book content. There must _also_ be an
-        html file that includes the manifest. That second html file can be empty
-        except for the html tag linking to the manifest, and its location should
-        be used as the ApplicationCacheCacher's bookCacheUrl.
-    
-        The ApplicationCacheCacher will create an iframe with the bookCacheUrl to start
-        the download of book content. Since the book's html files are in the manifest,
-        once the cache is ready any of those files will be loaded from the cache.
-        */
-    var ApplicationCacheCacher = (function () {
-        function ApplicationCacheCacher(config) {
-            this.statusUpdateCallback = function () { };
-            this.status = Cacher_1.CacheStatus.Uncached;
-            this.bookCacheUrl = config.bookCacheUrl;
-        }
-        ApplicationCacheCacher.prototype.enable = function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var _this = this;
-                return __generator(this, function (_a) {
-                    this.bookCacheElement = window.document.createElement("iframe");
-                    this.bookCacheElement.style.display = "none";
-                    window.document.body.appendChild(this.bookCacheElement);
-                    this.bookCacheElement.src = this.bookCacheUrl.href;
-                    this.updateStatus();
-                    this.bookCacheElement.addEventListener("load", function () {
-                        try {
-                            _this.updateStatus();
-                            var bookCache = _this.bookCacheElement.contentWindow.applicationCache;
-                            bookCache.oncached = _this.updateStatus.bind(_this);
-                            bookCache.onchecking = _this.updateStatus.bind(_this);
-                            bookCache.ondownloading = _this.updateStatus.bind(_this);
-                            bookCache.onerror = _this.handleError.bind(_this);
-                            bookCache.onnoupdate = _this.updateStatus.bind(_this);
-                            bookCache.onupdateready = _this.updateStatus.bind(_this);
-                        }
-                        catch (err) {
-                            _this.handleError();
-                        }
-                    });
-                    return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                });
-            });
-        };
-        ApplicationCacheCacher.prototype.onStatusUpdate = function (callback) {
-            this.statusUpdateCallback = callback;
-            this.updateStatus();
-        };
-        ApplicationCacheCacher.prototype.getStatus = function () {
-            return this.status;
-        };
-        ApplicationCacheCacher.prototype.updateStatus = function () {
-            var status;
-            var appCacheStatus = window.applicationCache.UNCACHED;
-            if (this.bookCacheElement &&
-                this.bookCacheElement.contentWindow.applicationCache &&
-                this.bookCacheElement.contentWindow.applicationCache.status !== undefined) {
-                appCacheStatus = this.bookCacheElement.contentWindow.applicationCache.status;
-            }
-            if (appCacheStatus === window.applicationCache.UPDATEREADY) {
-                status = Cacher_1.CacheStatus.UpdateAvailable;
-            }
-            else if (appCacheStatus === window.applicationCache.DOWNLOADING) {
-                status = Cacher_1.CacheStatus.Downloading;
-            }
-            else if (appCacheStatus === window.applicationCache.UNCACHED ||
-                appCacheStatus === window.applicationCache.OBSOLETE) {
-                status = Cacher_1.CacheStatus.Uncached;
-            }
-            else if (appCacheStatus === window.applicationCache.CHECKING) {
-                status = Cacher_1.CacheStatus.CheckingForUpdate;
-            }
-            else {
-                status = Cacher_1.CacheStatus.Downloaded;
-            }
-            this.status = status;
-            this.statusUpdateCallback(status);
-        };
-        ApplicationCacheCacher.prototype.handleError = function () {
-            this.status = Cacher_1.CacheStatus.Error;
-            this.statusUpdateCallback(Cacher_1.CacheStatus.Error);
-        };
-        return ApplicationCacheCacher;
-    }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /** Class that caches files using the (deprecated) application cache API.
-        This is necessary until Service Worker support improves.
-        
-        This class expects the application to have a cache manifest file
-        containing the application files (currently index.html, sw.js, fetch.js,
-        and webpub-viewer.js), and all the book content. There must _also_ be an
-        html file that includes the manifest. That second html file can be empty
-        except for the html tag linking to the manifest, and its location should
-        be used as the ApplicationCacheCacher's bookCacheUrl.
-    
-        The ApplicationCacheCacher will create an iframe with the bookCacheUrl to start
-        the download of book content. Since the book's html files are in the manifest,
-        once the cache is ready any of those files will be loaded from the cache.
-        */
-    exports.default = ApplicationCacheCacher;
-});
-define("ServiceWorkerCacher", ["require", "exports", "Cacher", "Manifest", "ApplicationCacheCacher"], function (require, exports, Cacher_2, Manifest_1, ApplicationCacheCacher_1) {
-    "use strict";
-    /** Class that caches responses using ServiceWorker's Cache API, and optionally
-        falls back to the application cache if service workers aren't available. */
-    var ServiceWorkerCacher = (function () {
-        /** Create a ServiceWorkerCacher. */
-        function ServiceWorkerCacher(config) {
-            this.cacheStatus = Cacher_2.CacheStatus.Uncached;
-            this.statusUpdateCallback = function () { };
-            this.serviceWorkerUrl = config.serviceWorkerUrl || new URL("sw.js", config.manifestUrl.href);
-            this.staticFileUrls = config.staticFileUrls || [];
-            this.store = config.store;
-            this.manifestUrl = config.manifestUrl;
-            var protocol = window.location.protocol;
-            this.areServiceWorkersSupported = !!navigator.serviceWorker && !!window.caches && (protocol === "https:");
-            if (!this.areServiceWorkersSupported && config.fallbackBookCacheUrl) {
-                this.fallbackCacher = new ApplicationCacheCacher_1.default({ bookCacheUrl: config.fallbackBookCacheUrl });
-            }
-        }
-        ServiceWorkerCacher.prototype.enable = function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var err_2;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!this.fallbackCacher)
-                                return [3 /*break*/, 1];
-                            return [2 /*return*/, this.fallbackCacher.enable()];
-                        case 1:
-                            if (!(this.areServiceWorkersSupported && (this.cacheStatus !== Cacher_2.CacheStatus.Downloaded)))
-                                return [3 /*break*/, 5];
-                            this.cacheStatus = Cacher_2.CacheStatus.Downloading;
-                            this.updateStatus();
-                            navigator.serviceWorker.register(this.serviceWorkerUrl.href);
-                            _a.label = 2;
-                        case 2:
-                            _a.trys.push([2, 4, , 5]);
-                            return [4 /*yield*/, this.verifyAndCacheManifest(this.manifestUrl)];
-                        case 3:
-                            _a.sent();
-                            this.cacheStatus = Cacher_2.CacheStatus.Downloaded;
-                            this.updateStatus();
-                            return [3 /*break*/, 5];
-                        case 4:
-                            err_2 = _a.sent();
-                            this.cacheStatus = Cacher_2.CacheStatus.Error;
-                            this.updateStatus();
-                            return [3 /*break*/, 5];
-                        case 5: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.verifyAndCacheManifest = function (manifestUrl) {
-            return __awaiter(this, void 0, void 0, function () {
-                var urlsToCache, _i, _a, url, promises, _b, promises_1, promise, err_3;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0: return [4 /*yield*/, navigator.serviceWorker.ready];
-                        case 1:
-                            _c.sent();
-                            _c.label = 2;
-                        case 2:
-                            _c.trys.push([2, 7, , 8]);
-                            urlsToCache = [manifestUrl.href];
-                            for (_i = 0, _a = this.staticFileUrls; _i < _a.length; _i++) {
-                                url = _a[_i];
-                                urlsToCache.push(url.href);
-                            }
-                            promises = [this.cacheManifest(manifestUrl), this.cacheUrls(urlsToCache, manifestUrl)];
-                            _b = 0, promises_1 = promises;
-                            _c.label = 3;
-                        case 3:
-                            if (!(_b < promises_1.length))
-                                return [3 /*break*/, 6];
-                            promise = promises_1[_b];
-                            return [4 /*yield*/, promise];
-                        case 4:
-                            _c.sent();
-                            _c.label = 5;
-                        case 5:
-                            _b++;
-                            return [3 /*break*/, 3];
-                        case 6: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                        case 7:
-                            err_3 = _c.sent();
-                            return [2 /*return*/, new Promise(function (_, reject) { return reject(err_3); })];
-                        case 8: return [2 /*return*/];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.cacheUrls = function (urls, manifestUrl) {
-            return __awaiter(this, void 0, void 0, function () {
-                var cache;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, window.caches.open(manifestUrl.href)];
-                        case 1:
-                            cache = _a.sent();
-                            return [2 /*return*/, cache.addAll(urls.map(function (url) { return new URL(url, manifestUrl.href).href; }))];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.cacheManifest = function (manifestUrl) {
-            return __awaiter(this, void 0, void 0, function () {
-                var manifest, promises, _i, promises_2, promise;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Manifest_1.default.getManifest(manifestUrl, this.store)];
-                        case 1:
-                            manifest = _a.sent();
-                            promises = [this.cacheSpine(manifest, manifestUrl), this.cacheResources(manifest, manifestUrl)];
-                            _i = 0, promises_2 = promises;
-                            _a.label = 2;
-                        case 2:
-                            if (!(_i < promises_2.length))
-                                return [3 /*break*/, 5];
-                            promise = promises_2[_i];
-                            return [4 /*yield*/, promise];
-                        case 3:
-                            _a.sent();
-                            _a.label = 4;
-                        case 4:
-                            _i++;
-                            return [3 /*break*/, 2];
-                        case 5: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.cacheSpine = function (manifest, manifestUrl) {
-            return __awaiter(this, void 0, void 0, function () {
-                var urls, _i, _a, resource;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            urls = [];
-                            for (_i = 0, _a = manifest.spine; _i < _a.length; _i++) {
-                                resource = _a[_i];
-                                if (resource.href) {
-                                    urls.push(resource.href);
-                                }
-                            }
-                            return [4 /*yield*/, this.cacheUrls(urls, manifestUrl)];
-                        case 1: return [2 /*return*/, _b.sent()];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.cacheResources = function (manifest, manifestUrl) {
-            return __awaiter(this, void 0, void 0, function () {
-                var urls, _i, _a, resource;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            urls = [];
-                            for (_i = 0, _a = manifest.resources; _i < _a.length; _i++) {
-                                resource = _a[_i];
-                                if (resource.href) {
-                                    urls.push(resource.href);
-                                }
-                            }
-                            return [4 /*yield*/, this.cacheUrls(urls, manifestUrl)];
-                        case 1: return [2 /*return*/, _b.sent()];
-                    }
-                });
-            });
-        };
-        ServiceWorkerCacher.prototype.onStatusUpdate = function (callback) {
-            if (this.fallbackCacher) {
-                this.fallbackCacher.onStatusUpdate(callback);
-            }
-            else {
-                this.statusUpdateCallback = callback;
-                this.updateStatus();
-            }
-        };
-        ServiceWorkerCacher.prototype.getStatus = function () {
-            return this.cacheStatus;
-        };
-        ServiceWorkerCacher.prototype.updateStatus = function () {
-            this.statusUpdateCallback(this.cacheStatus);
-        };
-        return ServiceWorkerCacher;
-    }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /** Class that caches responses using ServiceWorker's Cache API, and optionally
-        falls back to the application cache if service workers aren't available. */
-    exports.default = ServiceWorkerCacher;
-});
-define("Navigator", ["require", "exports"], function (require, exports) {
-    "use strict";
 });
 define("BookView", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("PaginatedBookView", ["require", "exports"], function (require, exports) {
+define("BookTheme", ["require", "exports"], function (require, exports) {
     "use strict";
-});
-define("BrowserUtilities", ["require", "exports"], function (require, exports) {
-    "use strict";
-    /** Returns the current width of the document. */
-    function getWidth() {
-        return document.documentElement.clientWidth;
-    }
-    exports.getWidth = getWidth;
-    /** Returns the current height of the document. */
-    function getHeight() {
-        return document.documentElement.clientHeight;
-    }
-    exports.getHeight = getHeight;
-    /** Returns true if the browser is zoomed in with pinch-to-zoom on mobile. */
-    function isZoomed() {
-        return (getWidth() !== window.innerWidth);
-    }
-    exports.isZoomed = isZoomed;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("HTMLUtilities", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** Returns a single element matching the selector within the parentElement,
         or null if no element matches. */
     function findElement(parentElement, selector) {
@@ -631,93 +70,110 @@ define("HTMLUtilities", ["require", "exports"], function (require, exports) {
         }
     }
     exports.findRequiredElement = findRequiredElement;
-});
-define("ScrollingBookView", ["require", "exports", "BrowserUtilities", "HTMLUtilities"], function (require, exports, BrowserUtilities, HTMLUtilities) {
-    "use strict";
-    var ScrollingBookView = (function () {
-        function ScrollingBookView() {
-            this.name = "scrolling-book-view";
-            this.label = "Scrolling";
-            this.sideMargin = 0;
-            this.height = 0;
+    /** Returns a single element matching the selector within the parentElement in the iframe context,
+        or null if no element matches. */
+    function findIframeElement(parentElement, selector) {
+        if (parentElement === null) {
+            throw "parent element is null";
         }
-        ScrollingBookView.prototype.setIFrameSize = function () {
-            // Remove previous iframe height so body scroll height will be accurate.
-            this.bookElement.style.height = "";
-            this.bookElement.style.width = BrowserUtilities.getWidth() + "px";
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var width = (BrowserUtilities.getWidth() - this.sideMargin * 2) + "px";
-            body.style.width = width;
-            body.style.marginLeft = this.sideMargin + "px";
-            body.style.marginRight = this.sideMargin + "px";
-            var minHeight = this.height;
-            var bodyHeight = body.scrollHeight;
-            this.bookElement.style.height = Math.max(minHeight, bodyHeight) + "px";
-            var images = Array.prototype.slice.call(body.querySelectorAll("img"));
-            for (var _i = 0, images_1 = images; _i < images_1.length; _i++) {
-                var image = images_1[_i];
-                image.style.maxWidth = width;
-            }
-        };
-        ScrollingBookView.prototype.start = function (position) {
-            this.goToPosition(position);
-        };
-        ScrollingBookView.prototype.stop = function () {
-            this.bookElement.style.height = "";
-            this.bookElement.style.width = "";
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            body.style.width = "";
-            body.style.marginLeft = "";
-            body.style.marginRight = "";
-            var images = Array.prototype.slice.call(body.querySelectorAll("img"));
-            for (var _i = 0, images_2 = images; _i < images_2.length; _i++) {
-                var image = images_2[_i];
-                image.style.maxWidth = "";
-            }
-        };
-        ScrollingBookView.prototype.getCurrentPosition = function () {
-            return document.body.scrollTop / document.body.scrollHeight;
-        };
-        ScrollingBookView.prototype.atBottom = function () {
-            return (document.body.scrollHeight - document.body.scrollTop) === BrowserUtilities.getHeight();
-        };
-        ScrollingBookView.prototype.goToPosition = function (position) {
-            this.setIFrameSize();
-            document.body.scrollTop = document.body.scrollHeight * position;
-        };
-        ScrollingBookView.prototype.goToElement = function (elementId) {
-            var element = this.bookElement.contentDocument.getElementById(elementId);
-            if (element) {
-                // Put the element as close to the top as possible.
-                element.scrollIntoView();
-                // Unless we're already at the bottom, scroll up so the element is
-                // in the middle, and not covered by the top nav.
-                if ((document.body.scrollHeight - element.offsetTop) >= this.height) {
-                    document.body.scrollTop = Math.max(0, document.body.scrollTop - this.height / 3);
-                }
-            }
-        };
-        return ScrollingBookView;
-    }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ScrollingBookView;
+        else {
+            return parentElement.querySelector(selector);
+        }
+    }
+    exports.findIframeElement = findIframeElement;
+    /** Returns a single element matching the selector within the parent element in an iframe context,
+            or throws an exception if no element matches. */
+    function findRequiredIframeElement(parentElement, selector) {
+        var element = findIframeElement(parentElement, selector);
+        if (!element) {
+            throw "required element " + selector + " not found in iframe";
+        }
+        else {
+            return element;
+        }
+    }
+    exports.findRequiredIframeElement = findRequiredIframeElement;
+    /** Sets an attribute and its value for an HTML element */
+    function setAttr(element, attr, value) {
+        element.setAttribute(attr, value);
+    }
+    exports.setAttr = setAttr;
+    /** Removes an attribute for an HTML element */
+    function removeAttr(element, attr) {
+        element.removeAttribute(attr);
+    }
+    exports.removeAttr = removeAttr;
+    /** Creates an internal stylesheet in an HTML element */
+    function createStylesheet(element, id, cssStyles) {
+        var head = element.querySelector("head");
+        var stylesheet = document.createElement("style");
+        stylesheet.id = id;
+        stylesheet.textContent = cssStyles;
+        head.appendChild(stylesheet);
+    }
+    exports.createStylesheet = createStylesheet;
+    /** Removes an existing internal stylesheet in an HTML element */
+    function removeStylesheet(element, id) {
+        var head = element.querySelector("head");
+        var stylesheet = head.querySelector("#" + id);
+        head.removeChild(stylesheet);
+    }
+    exports.removeStylesheet = removeStylesheet;
 });
-define("BookSettings", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+define("Store", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("IconLib", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.WIDTH_ATTR = 24;
+    exports.HEIGHT_ATTR = 24;
+    exports.VIEWBOX_ATTR = "0 0 24 24";
+    var iconTemplate = function (id, title, path, classAttr) {
+        if (classAttr === void 0) { classAttr = "icon"; }
+        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + exports.WIDTH_ATTR + "\" height=\"" + exports.HEIGHT_ATTR + "\" viewBox=\"" + exports.VIEWBOX_ATTR + "\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"" + classAttr + "\" aria-labelledBy=\"" + id + "\">\n  <title id=\"" + id + "\">" + title + "</title>\n  " + path + "\n</svg>";
+    };
+    var iconSymbol = function (id, title, path, classAttr) {
+        if (classAttr === void 0) { classAttr = "svgIcon use"; }
+        return "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"" + classAttr + "\">\n  <defs>\n    <symbol id=\"" + id + "\" viewBox=\"" + exports.VIEWBOX_ATTR + "\">\n      <title>" + title + "</title>\n      " + path + "\n    </symbol>\n  </defs>\n</svg>";
+    };
+    var iconUse = function (id, classAttr) { return "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMidYMid meet\" class=\"" + classAttr + "\" role=\"img\" aria-labelledby=\"" + id + "\">\n  <use xlink:href=\"#" + id + "\"></use>\n</svg>"; };
+    exports.icons = {
+        "checkOriginal": iconSymbol("check-icon", "Checked", "<path d=\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z\"/>"),
+        "checkDupe": iconUse("check-icon", "checkedIcon"),
+        "closeOriginal": iconSymbol("close-icon", "Close", "<path d=\"M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z\"/>"),
+        "closeDupe": iconUse("close-icon", "icon close inactive-icon"),
+        "error": iconTemplate("error-icon", "Warning", "<path d=\"M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z\"/>"),
+        "home": "<path d=\"M12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81l5-4.5M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z\"/>",
+        "expand": iconTemplate("expand-icon", "Enter fullscreen", "<path d=\"M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z\"/>", "icon active-icon"),
+        "loading": iconTemplate("loading-icon", "Loading", "<path d=\"M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z\"/>"),
+        "menu": iconTemplate("menu-icon", "Show and hide navigation bar", "<path d=\"M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z\"/>", "icon menu open inactive-icon"),
+        "minimize": iconTemplate("minimize-icon", "Exit fullscreen", "<path d=\"M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z\"/>", "icon inactive-icon"),
+        "next": iconTemplate("next-icon", "Next Chapter", "<path d=\"M6.49 20.13l1.77 1.77 9.9-9.9-9.9-9.9-1.77 1.77L14.62 12l-8.13 8.13z\"/>"),
+        "previous": iconTemplate("previous-icon", "Previous Chapter", "<path d=\"M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z\"/>"),
+        "settings": iconTemplate("settings-icon", "Settings", "<path d=\"M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z\"/>", "icon open"),
+        "toc": iconTemplate("toc-icon", "Table of Contents", "<path d=\"M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z\"/>", "icon open")
+    };
+});
+define("BookSettings", ["require", "exports", "HTMLUtilities", "IconLib"], function (require, exports, HTMLUtilities, IconLib) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var template = function (sections) { return "\n    <ul class=\"settings-menu\" role=\"menu\">\n        " + sections + "\n    </ul>\n"; };
     var sectionTemplate = function (options) { return "\n    <li><ul class=\"settings-options\">\n        " + options + "\n    </ul></li>\n"; };
     var optionTemplate = function (liClassName, buttonClassName, label, role, svgIcon, buttonId) { return "\n    <li class='" + liClassName + "'><button id='" + buttonId + "' class='" + buttonClassName + "' role='" + role + "' tabindex=-1>" + label + svgIcon + "</button></li>\n"; };
     var offlineTemplate = "\n    <li>\n        <div class='offline-status'></div>\n    </li>\n";
-    var decreaseSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" aria-labelledby=\"decrease-font-size\" class=\"icon\">\n  <title id=\"decrease-font-size\">Decrease Font Size</title>\n    <path d=\"M30,0A30,30,0,1,0,60,30,30,30,0,0,0,30,0ZM47.41144,32h-35V28h35Z\"/>\n</svg>\n";
-    var increaseSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" aria-labelledby=\"increase-font-size\" class=\"icon\">\n  <title id=\"increase-font-size\">Increase Font Size</title>\n    <path d=\"M30,0A30,30,0,1,0,60,30,30,30,0,0,0,30,0ZM47.41144,32h-15.5V47.49841h-4V32h-15.5V28h15.5V12.49841h4V28h15.5Z\"/>\n</svg>\n";
-    var checkSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 45 32\" preserveAspectRatio=\"xMidYMid meet\" class=\"checkedIcon\" aria-label=\"check-icon\" role=\"img\">\n  <title>check icon</title>\n  <path d=\"M18.05257,31.0625,2.00775,15.01814a1,1,0,0,1,0-1.41422l2.535-2.535a1,1,0,0,1,1.4142,0L18.05257,23.16406,40.57154.646a1,1,0,0,1,1.4142,0l2.535,2.535a1,1,0,0,1,0,1.41423Z\" />\n</svg>\n";
-    var BookSettings = (function () {
-        function BookSettings(store, bookViews, fontSizes) {
-            this.viewChangeCallback = function () { };
+    var BookSettings = /** @class */ (function () {
+        function BookSettings(store, bookFonts, fontSizes, bookThemes, bookViews) {
+            this.fontChangeCallback = function () { };
             this.fontSizeChangeCallback = function () { };
+            this.themeChangeCallback = function () { };
+            this.viewChangeCallback = function () { };
             this.store = store;
-            this.bookViews = bookViews;
+            this.bookFonts = bookFonts;
             this.fontSizes = fontSizes;
+            this.bookThemes = bookThemes;
+            this.bookViews = bookViews;
         }
         BookSettings.create = function (config) {
             return __awaiter(this, void 0, void 0, function () {
@@ -726,7 +182,7 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                     switch (_a.label) {
                         case 0:
                             fontSizes = config.fontSizesInPixels.map(function (fontSize) { return fontSize + "px"; });
-                            settings = new this(config.store, config.bookViews, fontSizes);
+                            settings = new this(config.store, config.bookFonts, fontSizes, config.bookThemes, config.bookViews);
                             return [4 /*yield*/, settings.initializeSelections(config.defaultFontSizeInPixels ? config.defaultFontSizeInPixels + "px" : undefined)];
                         case 1:
                             _a.sent();
@@ -737,33 +193,31 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
         };
         BookSettings.prototype.initializeSelections = function (defaultFontSize) {
             return __awaiter(this, void 0, void 0, function () {
-                var selectedView, selectedViewName, _i, _a, bookView, selectedFontSize, selectedFontSizeIsAvailable, averageFontSizeIndex;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var selectedFont, selectedFontName, _i, _a, bookFont, selectedFontSize, selectedFontSizeIsAvailable, averageFontSizeIndex, selectedTheme, selectedThemeName, _b, _c, bookTheme, selectedView, selectedViewName, _d, _e, bookView;
+                return __generator(this, function (_f) {
+                    switch (_f.label) {
                         case 0:
-                            if (!(this.bookViews.length >= 1))
-                                return [3 /*break*/, 2];
-                            selectedView = this.bookViews[0];
-                            return [4 /*yield*/, this.store.get(BookSettings.SELECTED_VIEW_KEY)];
+                            if (!(this.bookFonts.length >= 1)) return [3 /*break*/, 2];
+                            selectedFont = this.bookFonts[0];
+                            return [4 /*yield*/, this.store.get(BookSettings.SELECTED_FONT_KEY)];
                         case 1:
-                            selectedViewName = _b.sent();
-                            if (selectedViewName) {
-                                for (_i = 0, _a = this.bookViews; _i < _a.length; _i++) {
-                                    bookView = _a[_i];
-                                    if (bookView.name === selectedViewName) {
-                                        selectedView = bookView;
+                            selectedFontName = _f.sent();
+                            if (selectedFontName) {
+                                for (_i = 0, _a = this.bookFonts; _i < _a.length; _i++) {
+                                    bookFont = _a[_i];
+                                    if (bookFont.name === selectedFontName) {
+                                        selectedFont = bookFont;
                                         break;
                                     }
                                 }
                             }
-                            this.selectedView = selectedView;
-                            _b.label = 2;
+                            this.selectedFont = selectedFont;
+                            _f.label = 2;
                         case 2:
-                            if (!(this.fontSizes.length >= 1))
-                                return [3 /*break*/, 4];
+                            if (!(this.fontSizes.length >= 1)) return [3 /*break*/, 4];
                             return [4 /*yield*/, this.store.get(BookSettings.SELECTED_FONT_SIZE_KEY)];
                         case 3:
-                            selectedFontSize = _b.sent();
+                            selectedFontSize = _f.sent();
                             selectedFontSizeIsAvailable = (selectedFontSize && this.fontSizes.indexOf(selectedFontSize) !== -1);
                             // If not, or the user selected a size that's no longer an option, is there a default font size?
                             if ((!selectedFontSize || !selectedFontSizeIsAvailable) && defaultFontSize) {
@@ -776,34 +230,79 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                                 selectedFontSize = this.fontSizes[averageFontSizeIndex];
                             }
                             this.selectedFontSize = selectedFontSize;
-                            _b.label = 4;
-                        case 4: return [2 /*return*/];
+                            _f.label = 4;
+                        case 4:
+                            if (!(this.bookThemes.length >= 1)) return [3 /*break*/, 6];
+                            selectedTheme = this.bookThemes[0];
+                            return [4 /*yield*/, this.store.get(BookSettings.SELECTED_THEME_KEY)];
+                        case 5:
+                            selectedThemeName = _f.sent();
+                            if (selectedThemeName) {
+                                for (_b = 0, _c = this.bookThemes; _b < _c.length; _b++) {
+                                    bookTheme = _c[_b];
+                                    if (bookTheme.name === selectedThemeName) {
+                                        selectedTheme = bookTheme;
+                                        break;
+                                    }
+                                }
+                            }
+                            this.selectedTheme = selectedTheme;
+                            _f.label = 6;
+                        case 6:
+                            if (!(this.bookViews.length >= 1)) return [3 /*break*/, 8];
+                            selectedView = this.bookViews[0];
+                            return [4 /*yield*/, this.store.get(BookSettings.SELECTED_VIEW_KEY)];
+                        case 7:
+                            selectedViewName = _f.sent();
+                            if (selectedViewName) {
+                                for (_d = 0, _e = this.bookViews; _d < _e.length; _d++) {
+                                    bookView = _e[_d];
+                                    if (bookView.name === selectedViewName) {
+                                        selectedView = bookView;
+                                        break;
+                                    }
+                                }
+                            }
+                            this.selectedView = selectedView;
+                            _f.label = 8;
+                        case 8: return [2 /*return*/];
                     }
                 });
             });
         };
         BookSettings.prototype.renderControls = function (element) {
             var sections = [];
+            if (this.bookFonts.length > 1) {
+                var fontOptions = this.bookFonts.map(function (bookFont) {
+                    return optionTemplate("reading-style", bookFont.name, bookFont.label, "menuitem", IconLib.icons.checkDupe, bookFont.label);
+                });
+                sections.push(sectionTemplate(fontOptions.join("")));
+            }
+            if (this.fontSizes.length > 1) {
+                var fontSizeOptions = optionTemplate("font-setting", "decrease", "A-", "menuitem", "", "decrease-font") + optionTemplate("font-setting", "increase", "A+", "menuitem", "", "increase-font");
+                sections.push(sectionTemplate(fontSizeOptions));
+            }
+            if (this.bookThemes.length > 1) {
+                var themeOptions = this.bookThemes.map(function (bookTheme) {
+                    return optionTemplate("reading-theme", bookTheme.name, bookTheme.label, "menuitem", IconLib.icons.checkDupe, bookTheme.label);
+                });
+                sections.push(sectionTemplate(themeOptions.join("")));
+            }
             if (this.bookViews.length > 1) {
                 var viewOptions = this.bookViews.map(function (bookView) {
-                    return optionTemplate("reading-style", bookView.name, bookView.label, "menuitem", checkSvg, bookView.label);
+                    return optionTemplate("reading-style", bookView.name, bookView.label, "menuitem", IconLib.icons.checkDupe, bookView.label);
                 });
                 sections.push(sectionTemplate(viewOptions.join("")));
             }
-            if (this.fontSizes.length > 1) {
-                var fontSizeLabel = "<li class='font-size-label'>A</li>";
-                var fontSizeOptions = optionTemplate("font-setting", "decrease", decreaseSvg, "menuitem", "", "decrease-font") + fontSizeLabel + optionTemplate("font-setting", "increase", increaseSvg, "menuitem", "", "increase-font");
-                sections.push(sectionTemplate(fontSizeOptions));
-            }
             sections.push(offlineTemplate);
             element.innerHTML = template(sections.join(""));
-            this.viewButtons = {};
-            if (this.bookViews.length > 1) {
-                for (var _i = 0, _a = this.bookViews; _i < _a.length; _i++) {
-                    var bookView = _a[_i];
-                    this.viewButtons[bookView.name] = HTMLUtilities.findRequiredElement(element, "button[class=" + bookView.name + "]");
+            this.fontButtons = {};
+            if (this.bookFonts.length > 1) {
+                for (var _i = 0, _a = this.bookFonts; _i < _a.length; _i++) {
+                    var bookFont = _a[_i];
+                    this.fontButtons[bookFont.name] = HTMLUtilities.findRequiredElement(element, "button[class=" + bookFont.name + "]");
                 }
-                this.updateViewButtons();
+                this.updateFontButtons();
             }
             this.fontSizeButtons = {};
             if (this.fontSizes.length > 1) {
@@ -811,8 +310,23 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                     var fontSizeName = _c[_b];
                     this.fontSizeButtons[fontSizeName] = HTMLUtilities.findRequiredElement(element, "button[class=" + fontSizeName + "]");
                 }
-                this.fontSizeLabel = HTMLUtilities.findRequiredElement(element, 'li[class="font-size-label"]');
                 this.updateFontSizeButtons();
+            }
+            this.themeButtons = {};
+            if (this.bookThemes.length > 1) {
+                for (var _d = 0, _e = this.bookThemes; _d < _e.length; _d++) {
+                    var bookTheme = _e[_d];
+                    this.themeButtons[bookTheme.name] = HTMLUtilities.findRequiredElement(element, "button[class=" + bookTheme.name + "]");
+                }
+                this.updateThemeButtons();
+            }
+            this.viewButtons = {};
+            if (this.bookViews.length > 1) {
+                for (var _f = 0, _g = this.bookViews; _f < _g.length; _f++) {
+                    var bookView = _g[_f];
+                    this.viewButtons[bookView.name] = HTMLUtilities.findRequiredElement(element, "button[class=" + bookView.name + "]");
+                }
+                this.updateViewButtons();
             }
             this.offlineStatusElement = HTMLUtilities.findRequiredElement(element, 'div[class="offline-status"]');
             this.setupEvents();
@@ -821,33 +335,38 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                 event.stopPropagation();
             });
         };
-        BookSettings.prototype.onViewChange = function (callback) {
-            this.viewChangeCallback = callback;
+        BookSettings.prototype.onFontChange = function (callback) {
+            this.fontChangeCallback = callback;
         };
         BookSettings.prototype.onFontSizeChange = function (callback) {
             this.fontSizeChangeCallback = callback;
         };
+        BookSettings.prototype.onThemeChange = function (callback) {
+            this.themeChangeCallback = callback;
+        };
+        BookSettings.prototype.onViewChange = function (callback) {
+            this.viewChangeCallback = callback;
+        };
         BookSettings.prototype.setupEvents = function () {
             var _this = this;
-            var _loop_1 = function (view) {
-                var button = this_1.viewButtons[view.name];
+            var _loop_1 = function (font) {
+                var button = this_1.fontButtons[font.name];
                 if (button) {
                     button.addEventListener("click", function (event) {
-                        var position = _this.selectedView.getCurrentPosition();
-                        _this.selectedView.stop();
-                        view.start(position);
-                        _this.selectedView = view;
-                        _this.updateViewButtons();
-                        _this.storeSelectedView(view);
-                        _this.viewChangeCallback();
+                        _this.selectedFont.stop();
+                        font.start();
+                        _this.selectedFont = font;
+                        _this.updateFontButtons();
+                        _this.storeSelectedFont(font);
+                        _this.fontChangeCallback();
                         event.preventDefault();
                     });
                 }
             };
             var this_1 = this;
-            for (var _i = 0, _a = this.bookViews; _i < _a.length; _i++) {
-                var view = _a[_i];
-                _loop_1(view);
+            for (var _i = 0, _a = this.bookFonts; _i < _a.length; _i++) {
+                var font = _a[_i];
+                _loop_1(font);
             }
             if (this.fontSizes.length > 1) {
                 this.fontSizeButtons["decrease"].addEventListener("click", function (event) {
@@ -873,17 +392,56 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                     event.preventDefault();
                 });
             }
+            var _loop_2 = function (theme) {
+                var button = this_2.themeButtons[theme.name];
+                if (button) {
+                    button.addEventListener("click", function (event) {
+                        _this.selectedTheme.stop();
+                        theme.start();
+                        _this.selectedTheme = theme;
+                        _this.updateThemeButtons();
+                        _this.storeSelectedTheme(theme);
+                        _this.themeChangeCallback();
+                        event.preventDefault();
+                    });
+                }
+            };
+            var this_2 = this;
+            for (var _b = 0, _c = this.bookThemes; _b < _c.length; _b++) {
+                var theme = _c[_b];
+                _loop_2(theme);
+            }
+            var _loop_3 = function (view) {
+                var button = this_3.viewButtons[view.name];
+                if (button) {
+                    button.addEventListener("click", function (event) {
+                        var position = _this.selectedView.getCurrentPosition();
+                        _this.selectedView.stop();
+                        view.start(position);
+                        _this.selectedView = view;
+                        _this.updateViewButtons();
+                        _this.storeSelectedView(view);
+                        _this.viewChangeCallback();
+                        event.preventDefault();
+                    });
+                }
+            };
+            var this_3 = this;
+            for (var _d = 0, _e = this.bookViews; _d < _e.length; _d++) {
+                var view = _e[_d];
+                _loop_3(view);
+            }
         };
-        BookSettings.prototype.updateViewButtons = function () {
-            for (var _i = 0, _a = this.bookViews; _i < _a.length; _i++) {
-                var view = _a[_i];
-                if (view === this.selectedView) {
-                    this.viewButtons[view.name].className = view.name + " active";
-                    this.viewButtons[view.name].setAttribute("aria-label", view.label + " mode enabled");
+        BookSettings.prototype.updateFontButtons = function () {
+            for (var _i = 0, _a = this.bookFonts; _i < _a.length; _i++) {
+                var font = _a[_i];
+                if (font === this.selectedFont) {
+                    this.fontButtons[font.name].className = font.name + " active";
+                    this.fontButtons[font.name].setAttribute("aria-label", font.label + " font enabled");
                 }
                 else {
-                    this.viewButtons[view.name].className = view.name;
-                    this.viewButtons[view.name].setAttribute("aria-label", view.label + " mode disabled");
+                    this.fontButtons[font.name].className = font.name;
+                    this.fontButtons[font.name].setAttribute("aria-label", font.label + " font disabled");
                 }
             }
         };
@@ -902,19 +460,51 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                 this.fontSizeButtons["increase"].className = "increase";
             }
         };
-        BookSettings.prototype.getSelectedView = function () {
-            return this.selectedView;
+        BookSettings.prototype.updateThemeButtons = function () {
+            for (var _i = 0, _a = this.bookThemes; _i < _a.length; _i++) {
+                var theme = _a[_i];
+                if (theme === this.selectedTheme) {
+                    this.themeButtons[theme.name].className = theme.name + " active";
+                    this.themeButtons[theme.name].setAttribute("aria-label", theme.label + " mode enabled");
+                }
+                else {
+                    this.themeButtons[theme.name].className = theme.name;
+                    this.themeButtons[theme.name].setAttribute("aria-label", theme.label + " mode disabled");
+                }
+            }
+        };
+        BookSettings.prototype.updateViewButtons = function () {
+            for (var _i = 0, _a = this.bookViews; _i < _a.length; _i++) {
+                var view = _a[_i];
+                if (view === this.selectedView) {
+                    this.viewButtons[view.name].className = view.name + " active";
+                    this.viewButtons[view.name].setAttribute("aria-label", view.label + " mode enabled");
+                }
+                else {
+                    this.viewButtons[view.name].className = view.name;
+                    this.viewButtons[view.name].setAttribute("aria-label", view.label + " mode disabled");
+                }
+            }
+        };
+        BookSettings.prototype.getSelectedFont = function () {
+            return this.selectedFont;
         };
         BookSettings.prototype.getSelectedFontSize = function () {
             return this.selectedFontSize;
         };
+        BookSettings.prototype.getSelectedTheme = function () {
+            return this.selectedTheme;
+        };
+        BookSettings.prototype.getSelectedView = function () {
+            return this.selectedView;
+        };
         BookSettings.prototype.getOfflineStatusElement = function () {
             return this.offlineStatusElement;
         };
-        BookSettings.prototype.storeSelectedView = function (view) {
+        BookSettings.prototype.storeSelectedFont = function (font) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
-                    return [2 /*return*/, this.store.set(BookSettings.SELECTED_VIEW_KEY, view.name)];
+                    return [2 /*return*/, this.store.set(BookSettings.SELECTED_FONT_KEY, font.name)];
                 });
             });
         };
@@ -925,17 +515,385 @@ define("BookSettings", ["require", "exports", "HTMLUtilities"], function (requir
                 });
             });
         };
+        BookSettings.prototype.storeSelectedTheme = function (theme) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, this.store.set(BookSettings.SELECTED_THEME_KEY, theme.name)];
+                });
+            });
+        };
+        BookSettings.prototype.storeSelectedView = function (view) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, this.store.set(BookSettings.SELECTED_VIEW_KEY, view.name)];
+                });
+            });
+        };
+        BookSettings.SELECTED_FONT_KEY = "settings-selected-font";
+        BookSettings.SELECTED_FONT_SIZE_KEY = "settings-selected-font-size";
+        BookSettings.SELECTED_THEME_KEY = "settings-selected-theme";
+        BookSettings.SELECTED_VIEW_KEY = "settings-selected-view";
         return BookSettings;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BookSettings;
-    BookSettings.SELECTED_VIEW_KEY = "settings-selected-view";
-    BookSettings.SELECTED_FONT_SIZE_KEY = "settings-selected-font-size";
     ;
+});
+define("BrowserUtilities", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /** Returns the current width of the document. */
+    function getWidth() {
+        return document.documentElement.clientWidth;
+    }
+    exports.getWidth = getWidth;
+    /** Returns the current height of the document. */
+    function getHeight() {
+        return document.documentElement.clientHeight;
+    }
+    exports.getHeight = getHeight;
+    /** Returns true if the browser is zoomed in with pinch-to-zoom on mobile. */
+    function isZoomed() {
+        return (getWidth() !== window.innerWidth);
+    }
+    exports.isZoomed = isZoomed;
+});
+define("Cacher", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var CacheStatus;
+    (function (CacheStatus) {
+        /** The book has not been cached. */
+        CacheStatus[CacheStatus["Uncached"] = 0] = "Uncached";
+        /** There is a new version available (Application Cache only - refresh the page to update). */
+        CacheStatus[CacheStatus["UpdateAvailable"] = 1] = "UpdateAvailable";
+        /** The app is checking for a new version (Application Cache only). */
+        CacheStatus[CacheStatus["CheckingForUpdate"] = 2] = "CheckingForUpdate";
+        /** The cache is downloading. */
+        CacheStatus[CacheStatus["Downloading"] = 3] = "Downloading";
+        /** The cache is fully downloaded and the book is available offline. */
+        CacheStatus[CacheStatus["Downloaded"] = 4] = "Downloaded";
+        /** There was an error downloading the cache, and the book is not available offline. */
+        CacheStatus[CacheStatus["Error"] = 5] = "Error";
+    })(CacheStatus = exports.CacheStatus || (exports.CacheStatus = {}));
+});
+define("PaginatedBookView", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("ColumnsPaginatedBookView", ["require", "exports", "HTMLUtilities", "BrowserUtilities"], function (require, exports, HTMLUtilities, BrowserUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ColumnsPaginatedBookView = /** @class */ (function () {
+        function ColumnsPaginatedBookView() {
+            this.name = "columns-paginated-view";
+            this.label = "Paginated";
+            this.sideMargin = 0;
+            this.height = 0;
+            this.hasFixedScrollWidth = false;
+        }
+        ColumnsPaginatedBookView.prototype.start = function (position) {
+            // any is necessary because CSSStyleDeclaration type does not include
+            // all the vendor-prefixed attributes.
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            body.style.webkitColumnCount = "1";
+            body.style.MozColumnCount = "1";
+            body.style.columnCount = "1";
+            body.style.webkitColumnFill = "auto";
+            body.style.MozColumnFill = "auto";
+            body.style.columnFill = "auto";
+            body.style.overflow = "hidden";
+            body.style.position = "relative";
+            body.style.webkitFontSmoothing = "subpixel-antialiased";
+            this.setSize();
+            var viewportElement = document.createElement("meta");
+            viewportElement.name = "viewport";
+            viewportElement.content = "width=device-width, initial-scale=1, maximum-scale=1";
+            var head = HTMLUtilities.findIframeElement(this.bookElement.contentDocument, "head");
+            if (head) {
+                head.appendChild(viewportElement);
+            }
+            this.checkForFixedScrollWidth();
+            this.goToPosition(position);
+            // This is delayed to prevent a bug in iOS 10.3 that causes
+            // the top links to be displayed in the middle of the page.
+            setTimeout(function () {
+                document.body.style.overflow = "hidden";
+                // This prevents overscroll/bouncing on iOS.
+                document.body.style.position = "fixed";
+                document.body.style.left = "0";
+                document.body.style.right = "0";
+                document.body.style.top = "0";
+                document.body.style.bottom = "0";
+            }, 0);
+        };
+        ColumnsPaginatedBookView.prototype.checkForFixedScrollWidth = function () {
+            // Determine if the scroll width changes when the left position
+            // changes. This differs across browsers and sometimes across
+            // books in the same browser.
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var originalLeft = (body.style.left || "0px").slice(0, -2);
+            var originalScrollWidth = body.scrollWidth;
+            body.style.left = (originalLeft - 1) + "px";
+            this.hasFixedScrollWidth = (body.scrollWidth === originalScrollWidth);
+            body.style.left = originalLeft + "px";
+        };
+        ColumnsPaginatedBookView.prototype.setSize = function () {
+            // any is necessary because CSSStyleDeclaration type does not include
+            // all the vendor-prefixed attributes.
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var width = (BrowserUtilities.getWidth() - this.sideMargin * 2) + "px";
+            body.style.columnWidth = width;
+            body.style.webkitColumnWidth = width;
+            body.style.MozColumnWidth = width;
+            body.style.columnGap = this.sideMargin * 2 + "px";
+            body.style.webkitColumnGap = this.sideMargin * 2 + "px";
+            body.style.MozColumnGap = this.sideMargin * 2 + "px";
+            body.style.height = this.height + "px";
+            body.style.width = width;
+            body.style.marginLeft = this.sideMargin + "px";
+            body.style.marginRight = this.sideMargin + "px";
+            body.style.marginTop = "0px";
+            body.style.marginBottom = "0px";
+            this.bookElement.contentDocument.documentElement.style.height = this.height + "px";
+            this.bookElement.style.height = this.height + "px";
+            this.bookElement.style.width = BrowserUtilities.getWidth() + "px";
+            var images = body.querySelectorAll("img");
+            for (var _i = 0, images_1 = images; _i < images_1.length; _i++) {
+                var image = images_1[_i];
+                image.style.maxWidth = "100%";
+                // Determine how much vertical space there is for the image.
+                var nextElement = image;
+                var totalMargins = 0;
+                while (nextElement !== body) {
+                    var computedStyle = window.getComputedStyle(nextElement);
+                    if (computedStyle.marginTop) {
+                        totalMargins += parseInt(computedStyle.marginTop.slice(0, -2), 10);
+                    }
+                    if (computedStyle.marginBottom) {
+                        totalMargins += parseInt(computedStyle.marginBottom.slice(0, -2), 10);
+                    }
+                    nextElement = nextElement.parentElement;
+                }
+                image.style.maxHeight = (this.height - totalMargins) + "px";
+                // Without this, an image at the end of a resource can end up
+                // with an extra empty column after it.
+                image.style.verticalAlign = "top";
+            }
+        };
+        ColumnsPaginatedBookView.prototype.stop = function () {
+            document.body.style.overflow = "auto";
+            document.body.style.position = "static";
+            document.body.style.left = "";
+            document.body.style.right = "";
+            document.body.style.top = "";
+            document.body.style.bottom = "";
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            body.style.columnCount = "";
+            body.style.webkitColumnCount = "";
+            body.style.MozColumnCount = "";
+            body.style.columnGap = "";
+            body.style.webkitColumnGap = "";
+            body.style.MozColumnGap = "";
+            body.style.columnFill = "";
+            body.style.webkitColumnFill = "";
+            body.style.MozColumnFill = "";
+            body.style.overflow = "";
+            body.style.position = "";
+            body.style.webkitFontSmoothing = "";
+            body.style.columnWidth = "";
+            body.style.webkitColumnWidth = "";
+            body.style.MozColumnWidth = "";
+            body.style.height = "";
+            body.style.width = "";
+            body.style.marginLeft = "";
+            body.style.marginRight = "";
+            body.style.marginTop = "";
+            body.style.marginBottom = "";
+            this.bookElement.contentDocument.documentElement.style.height = "";
+            this.bookElement.style.height = "";
+            this.bookElement.style.width = "";
+            var images = body.querySelectorAll("img");
+            for (var _i = 0, images_2 = images; _i < images_2.length; _i++) {
+                var image = images_2[_i];
+                image.style.maxWidth = "";
+                image.style.maxHeight = "";
+                image.style.display = "";
+                image.style.marginLeft = "";
+                image.style.marginRight = "";
+            }
+        };
+        /** Returns the total width of the columns that are currently
+            positioned to the left of the iframe viewport. */
+        ColumnsPaginatedBookView.prototype.getLeftColumnsWidth = function () {
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
+            var isXML = this.bookElement.src.indexOf(".xml") !== -1;
+            if (isFirefox && isXML) {
+                // Feedbooks epubs have resources with .xml file extensions for historical
+                // reasons. Firefox handles these differently than XHTML files, and setting
+                // a left position as well as overflow:hidden causes the pages to be blank.
+                return body.scrollLeft;
+            }
+            return -(body.style.left || "0px").slice(0, -2);
+        };
+        /** Returns the total width of the columns that are currently
+            positioned to the right of the iframe viewport. */
+        ColumnsPaginatedBookView.prototype.getRightColumnsWidth = function () {
+            // scrollWidth includes the column in the iframe viewport as well as
+            // columns to the right.
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var scrollWidth = body.scrollWidth;
+            var width = this.getColumnWidth();
+            var rightWidth = scrollWidth + this.sideMargin - width;
+            if (this.hasFixedScrollWidth) {
+                // In some browsers (IE and Firefox with certain books), 
+                // scrollWidth doesn't change when some columns
+                // are off to the left, so we need to subtract them.
+                var leftWidth = this.getLeftColumnsWidth();
+                rightWidth = Math.max(0, rightWidth - leftWidth);
+            }
+            if (rightWidth === this.sideMargin) {
+                return 0;
+            }
+            else {
+                return rightWidth;
+            }
+        };
+        /** Returns the width of one column. */
+        ColumnsPaginatedBookView.prototype.getColumnWidth = function () {
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            return body.offsetWidth + this.sideMargin * 2;
+        };
+        /** Shifts the columns so that the specified width is positioned
+            to the left of the iframe viewport. */
+        ColumnsPaginatedBookView.prototype.setLeftColumnsWidth = function (width) {
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
+            var isXML = this.bookElement.src.indexOf(".xml") !== -1;
+            if (isFirefox && isXML) {
+                // Feedbooks epubs have resources with .xml file extensions for historical
+                // reasons. Firefox handles these differently than XHTML files, and setting
+                // a left position as well as overflow:hidden causes the pages to be blank.
+                body.scrollLeft = width;
+            }
+            else {
+                body.style.left = -width + "px";
+            }
+        };
+        /** Returns number in range [0..1) representing the
+            proportion of columns that are currently positioned
+            to the left of the iframe viewport. */
+        ColumnsPaginatedBookView.prototype.getCurrentPosition = function () {
+            var width = this.getColumnWidth();
+            var leftWidth = this.getLeftColumnsWidth();
+            var rightWidth = this.getRightColumnsWidth();
+            var totalWidth = leftWidth + width + rightWidth;
+            return leftWidth / totalWidth;
+        };
+        /** Returns the current 1-indexed page number. */
+        ColumnsPaginatedBookView.prototype.getCurrentPage = function () {
+            return this.getCurrentPosition() * this.getPageCount() + 1;
+        };
+        /** Returns the total number of pages. */
+        ColumnsPaginatedBookView.prototype.getPageCount = function () {
+            var width = this.getColumnWidth();
+            var leftWidth = this.getLeftColumnsWidth();
+            var rightWidth = this.getRightColumnsWidth();
+            var totalWidth = leftWidth + width + rightWidth;
+            return totalWidth / width;
+        };
+        ColumnsPaginatedBookView.prototype.onFirstPage = function () {
+            var leftWidth = this.getLeftColumnsWidth();
+            return (leftWidth <= 0);
+        };
+        ColumnsPaginatedBookView.prototype.onLastPage = function () {
+            var rightWidth = this.getRightColumnsWidth();
+            return (rightWidth <= 0);
+        };
+        ColumnsPaginatedBookView.prototype.goToPreviousPage = function () {
+            var leftWidth = this.getLeftColumnsWidth();
+            var width = this.getColumnWidth();
+            this.setLeftColumnsWidth(leftWidth - width);
+        };
+        ColumnsPaginatedBookView.prototype.goToNextPage = function () {
+            var leftWidth = this.getLeftColumnsWidth();
+            var width = this.getColumnWidth();
+            this.setLeftColumnsWidth(leftWidth + width);
+        };
+        /** Goes to a position specified by a number in the range [0..1].
+            The position should be a number as returned by getCurrentPosition,
+            or 1 to go to the last page. The position will be rounded down so
+            it matches the position of one of the columns. */
+        /** @param position Number in range [0..1] */
+        ColumnsPaginatedBookView.prototype.goToPosition = function (position) {
+            this.setSize();
+            // If the window has changed size since the columns were set up,
+            // we need to reset position so we can determine the new total width.
+            this.setLeftColumnsWidth(0);
+            var width = this.getColumnWidth();
+            var rightWidth = this.getRightColumnsWidth();
+            var totalWidth = width + rightWidth;
+            var newLeftWidth = position * totalWidth;
+            // Round the new left width so it's a multiple of the column width.
+            var roundedLeftWidth = Math.round(newLeftWidth / width) * width;
+            if (roundedLeftWidth >= totalWidth) {
+                // We've gone too far and all the columns are off to the left.
+                // Move one column back into the viewport.
+                roundedLeftWidth = roundedLeftWidth - width;
+            }
+            this.setLeftColumnsWidth(roundedLeftWidth);
+        };
+        ColumnsPaginatedBookView.prototype.goToElement = function (elementId, relative) {
+            var element = this.bookElement.contentDocument.getElementById(elementId);
+            if (element) {
+                // Get the element's position in the iframe, and
+                // round that to figure out the column it's in.
+                // There is a bug in Safari when using getBoundingClientRect
+                // on an element that spans multiple columns. Temporarily
+                // set the element's height to fit it on one column so we
+                // can determine the first column position.
+                var originalHeight = element.style.height;
+                element.style.height = "0";
+                var left = element.getBoundingClientRect().left;
+                var width = this.getColumnWidth();
+                var roundedLeftWidth = Math.floor(left / width) * width;
+                if (relative) {
+                    var origin = this.getLeftColumnsWidth();
+                    roundedLeftWidth = (Math.floor(left / width) * width) + origin;
+                }
+                // Restore element's original height.
+                element.style.height = originalHeight;
+                this.setLeftColumnsWidth(roundedLeftWidth);
+            }
+        };
+        return ColumnsPaginatedBookView;
+    }());
+    exports.default = ColumnsPaginatedBookView;
+});
+define("DayTheme", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var DayTheme = /** @class */ (function () {
+        function DayTheme() {
+            this.name = "day-theme";
+            this.label = "Day";
+        }
+        DayTheme.prototype.start = function () {
+            var rootElement = document.documentElement;
+            HTMLUtilities.setAttr(rootElement, "data-viewer-theme", "day");
+        };
+        DayTheme.prototype.stop = function () {
+            var rootElement = document.documentElement;
+            HTMLUtilities.removeAttr(rootElement, "data-viewer-theme");
+        };
+        return DayTheme;
+    }());
+    exports.default = DayTheme;
 });
 define("EventHandler", ["require", "exports", "BrowserUtilities"], function (require, exports, BrowserUtilities) {
     "use strict";
-    var EventHandler = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var EventHandler = /** @class */ (function () {
         function EventHandler() {
             var _this = this;
             this.pendingMouseEventStart = null;
@@ -947,9 +905,12 @@ define("EventHandler", ["require", "exports", "BrowserUtilities"], function (req
             this.onRightTap = function () { };
             this.onBackwardSwipe = function () { };
             this.onForwardSwipe = function () { };
+            this.onLeftArrow = function () { };
+            this.onRightArrow = function () { };
             this.onLeftHover = function () { };
             this.onRightHover = function () { };
             this.onRemoveHover = function () { };
+            this.onInternalLink = function () { };
             this.handleMouseEventStart = function (event) {
                 _this.pendingMouseEventStart = event;
             };
@@ -991,6 +952,7 @@ define("EventHandler", ["require", "exports", "BrowserUtilities"], function (req
                 _this.pendingMouseEventStart = null;
             };
             this.handleTouchEventEnd = function (event) {
+                event.preventDefault();
                 if (BrowserUtilities.isZoomed()) {
                     return;
                 }
@@ -1085,6 +1047,7 @@ define("EventHandler", ["require", "exports", "BrowserUtilities"], function (req
                     return;
                 }
                 if (_this.checkForLink(_this.pendingTouchEventEnd)) {
+                    _this.handleLinks(_this.pendingTouchEventEnd);
                     // This was a single tap on a link. Do nothing.
                     _this.pendingTouchEventEnd = null;
                     return;
@@ -1137,73 +1100,438 @@ define("EventHandler", ["require", "exports", "BrowserUtilities"], function (req
             this.handleMouseLeave = function () {
                 _this.onRemoveHover();
             };
-            this.handleExternalLinks = function (event) {
+            this.handleLinks = function (event) {
                 var link = _this.checkForLink(event);
                 if (link) {
                     // Open external links in new tabs.
                     var isSameOrigin = (window.location.protocol === link.protocol &&
                         window.location.port === link.port &&
                         window.location.hostname === link.hostname);
+                    var isInternal = (link.href.indexOf("#"));
                     if (!isSameOrigin) {
                         window.open(link.href, "_blank");
                         event.preventDefault();
                         event.stopPropagation();
                     }
+                    else if (isSameOrigin && isInternal !== -1) {
+                        _this.onInternalLink(event);
+                    }
+                    else if (isSameOrigin && isInternal === -1) {
+                        link.click();
+                    }
+                }
+            };
+            this.handleKeyboard = function (event) {
+                var LEFT_ARROW = 37;
+                var RIGHT_ARROW = 39;
+                var TAB_KEY = 9;
+                if (event.keyCode === LEFT_ARROW) {
+                    _this.onLeftArrow(event);
+                }
+                else if (event.keyCode === RIGHT_ARROW) {
+                    _this.onRightArrow(event);
+                }
+                else if (event.keyCode === TAB_KEY) {
+                    event.preventDefault();
                 }
             };
         }
         EventHandler.prototype.setupEvents = function (element) {
-            if (this.isTouchDevice()) {
+            if (element !== null) {
                 element.addEventListener("touchstart", this.handleTouchEventStart.bind(this));
                 element.addEventListener("touchend", this.handleTouchEventEnd.bind(this));
-            }
-            else {
                 element.addEventListener("mousedown", this.handleMouseEventStart.bind(this));
                 element.addEventListener("mouseup", this.handleMouseEventEnd.bind(this));
                 element.addEventListener("mouseenter", this.handleMouseMove.bind(this));
                 element.addEventListener("mousemove", this.handleMouseMove.bind(this));
                 element.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+                // Most click handling is done in the touchend and mouseup event handlers,
+                // but if there's a click on an external link we need to cancel the click
+                // event to prevent it from opening in the iframe.
+                element.addEventListener("click", this.handleLinks.bind(this));
+                element.addEventListener("keydown", this.handleKeyboard.bind(this));
             }
-            // Most click handling is done in the touchend and mouseup event handlers,
-            // but if there's a click on an external link we need to cancel the click
-            // event to prevent it from opening in the iframe.
-            element.addEventListener("click", this.handleExternalLinks.bind(this));
+            else {
+                throw "cannot setup events for null";
+            }
         };
-        EventHandler.prototype.isTouchDevice = function () {
-            return !!('ontouchstart' in window || navigator.maxTouchPoints);
-        };
+        EventHandler.CLICK_PIXEL_TOLERANCE = 10;
+        EventHandler.TAP_PIXEL_TOLERANCE = 10;
+        EventHandler.DOUBLE_CLICK_MS = 200;
+        EventHandler.LONG_PRESS_MS = 500;
+        EventHandler.DOUBLE_TAP_MS = 200;
+        EventHandler.SLOW_SWIPE_MS = 500;
         return EventHandler;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = EventHandler;
-    EventHandler.CLICK_PIXEL_TOLERANCE = 10;
-    EventHandler.TAP_PIXEL_TOLERANCE = 10;
-    EventHandler.DOUBLE_CLICK_MS = 200;
-    EventHandler.LONG_PRESS_MS = 500;
-    EventHandler.DOUBLE_TAP_MS = 200;
-    EventHandler.SLOW_SWIPE_MS = 500;
 });
-define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHandler", "BrowserUtilities", "HTMLUtilities"], function (require, exports, Cacher_3, Manifest_2, EventHandler_1, BrowserUtilities, HTMLUtilities) {
+define("Navigator", ["require", "exports"], function (require, exports) {
     "use strict";
-    var upLinkTemplate = function (href, label, ariaLabel) { return "\n  <a rel=\"up\" href='" + href + "' aria-label=\"" + ariaLabel + "\">\n    <svg width=\"16\" height=\"25\" viewBox=\"0 0 16 25\" aria-labelledby=\"up-label\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"icon\">\n      <title id=\"up-label\">" + label + "</title>\n      <polygon points=\"16 1.741 13.9 0 0 12.5 13.9 25 16 23.258 4.036 12.499 16 1.741\" />\n    </svg>\n    <span class=\"setting-text up\">" + label + "</span>\n  </a>\n"; };
-    var template = "\n  <nav class=\"publication\">\n    <div class=\"controls\">\n      <svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMidYMid meet\" class=\"svgIcon use\">\n          <defs>\n            <symbol id=\"close-icon\" viewBox=\"0 0 29.69 29.812\">\n              <title>Close Icon</title>\n              <path d=\"M2081.71,127.488l26.79-26.879a1.459,1.459,0,0,1,2.06,2.068l-26.79,26.879a1.453,1.453,0,0,1-2.06,0A1.483,1.483,0,0,1,2081.71,127.488Z\" transform=\"translate(-2081.31 -100.188)\"/>\n              <path d=\"M2083.77,100.609l26.79,26.879a1.459,1.459,0,0,1-2.06,2.068l-26.79-26.879a1.483,1.483,0,0,1,0-2.068A1.453,1.453,0,0,1,2083.77,100.609Z\" transform=\"translate(-2081.31 -100.188)\"/>\n            </symbol>\n        </defs>\n      </svg>\n      <a href=\"#settings-control\" class=\"scrolling-suggestion\" style=\"display: none\">\n          We recommend scrolling mode for use with screen readers and keyboard navigation.\n          Go to settings to switch to scrolling mode.\n      </a>\n      <ul class=\"links top active\">\n        <li>\n          <button class=\"contents disabled\" aria-labelledby=\"table-of-contents\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 275 180\" aria-labelledby=\"table-of-contents\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"icon open\">\n            <title id=\"table-of-contents\">table of contents</title>\n              <rect x=\"66\" y=\"152\" width=\"209\" height=\"28\"/>\n              <rect x=\"66\" y=\"76\" width=\"209\" height=\"28\"/>\n              <rect x=\"66\" width=\"209\" height=\"28\"/>\n              <rect width=\"33\" height=\"28\"/>\n              <rect y=\"76\" width=\"33\" height=\"28\"/>\n              <rect y=\"152\" width=\"33\" height=\"28\"/>\n            </svg>\n            <svg class=\"icon close inactive-icon\" role=\"img\" aria-labelledby=\"close-icon\">\n              <use xlink:href=\"#close-icon\"></use>\n            </svg>\n            <span class=\"setting-text contents\" id=\"contents\">Contents</span>\n          </button>\n          <div class=\"contents-view controls-view inactive\" aria-hidden=\"true\"></div>\n        </li>\n        <li>\n          <button id=\"settings-control\" class=\"settings\" aria-labelledby=\"settings\" aria-expanded=\"false\" aria-haspopup=\"true\">\n            <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 186.47158 186.4716\" aria-labelledby=\"settings\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"icon open\">\n              <title id=\"settings\">Settings</title>\n              <path d=\"M183.29465,117.36676l3.17693-24.131-23.52051-9.17834-4.75089-17.73081,15.78033-19.70844L159.1637,27.30789,136.04194,37.44974,120.145,28.2714,117.36676,3.17693,93.2358,0,84.05746,23.52051,66.32665,28.2714,46.61759,12.49107,27.30789,27.30789,37.44974,50.42966l-9.17834,15.897L3.17693,69.10484,0,93.2358l23.52051,9.17834L28.2714,120.145,12.49107,139.854l14.81682,19.3097,23.12177-10.14185,15.897,9.17834,2.77819,25.09447,24.131,3.17693,9.17834-23.52051L120.145,158.2002l19.70844,15.78033,19.31031-14.81682-10.14185-23.12177,9.17834-15.897ZM93.2358,129.84856A36.61276,36.61276,0,1,1,129.84856,93.2358,36.61267,36.61267,0,0,1,93.2358,129.84856Z\"/>\n              </svg>\n              <svg class=\"icon close inactive-icon\" role=\"img\" aria-labelledby=\"close-icon\">\n                <use xlink:href=\"#close-icon\"></use>\n              </svg>\n            <span class=\"setting-text settings\" aria-labelledby=\"settings\">Settings</span>\n          </button>\n          <div class=\"settings-view controls-view inactive\" aria-hidden=\"true\"></div>\n        </li>\n      </ul>\n    </div>\n    <!-- /controls -->\n  </nav>\n  <main style=\"overflow: hidden\" tabindex=-1>\n    <div class=\"loading\" style=\"display:none;\">Loading</div>\n    <div class=\"error\" style=\"display:none;\">\n      <span>There was an error loading this page.</span>\n      <button class=\"try-again\">Try again</button>\n    </div>\n    <div class=\"info top\">\n      <span class=\"book-title\"></span>\n    </div>\n    <iframe title=\"book text\" style=\"border:0; overflow: hidden;\"></iframe>\n    <div class=\"info bottom\">\n      <span class=\"chapter-position\"></span>\n      <span class=\"chapter-title\"></span>\n    </div>\n  </main>\n  <nav class=\"publication\">\n    <div class=\"controls\">\n      <ul class=\"links bottom active\">\n        <li>\n          <a rel=\"prev\" class=\"disabled\" role=\"button\" aria-labelledby=\"left-arrow-icon\">\n          <svg class=\"icon\" role=\"img\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 13.43359 24.06299\">\n            <title id=\"left-arrow-icon\">Previous Chapter</title>\n              <polygon points=\"11.995 24.063 0 12.019 12.02 0 13.434 1.414 2.825 12.022 13.413 22.651 11.995 24.063\"/>\n            </svg>\n          <span class=\"chapter-control\">Previous Chapter</span>\n          </a>\n        </li>\n        <li aria-label=\"chapters\">Chapters</li>\n        <li>\n          <a rel=\"next\" class=\"disabled\" role=\"button\" aria-labelledby=\"right-arrow-icon\">\n            <span class=\"chapter-control\">Next Chapter</span>\n            <svg class=\"icon\" role=\"img\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 13.43359 24.06299\">\n            <title id=\"right-arrow-icon\">Next Chapter</title>\n              <polygon points=\"1.438 0 13.434 12.044 1.414 24.063 0 22.649 10.608 12.041 0.021 1.412 1.438 0\"/>\n            </svg>\n          </a>\n        </li>\n      </ul>\n    </div>\n    <!-- /controls -->\n  </nav>\n";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("PublisherFont", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var PublisherFont = /** @class */ (function () {
+        function PublisherFont() {
+            this.name = "publisher-font";
+            this.label = "Publisher";
+        }
+        PublisherFont.prototype.start = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.setAttr(rootFrame, "data-viewer-font", "publisher");
+        };
+        PublisherFont.prototype.stop = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.removeAttr(rootFrame, "data-viewer-font");
+        };
+        return PublisherFont;
+    }());
+    exports.default = PublisherFont;
+});
+define("SerifFont", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var SerifFont = /** @class */ (function () {
+        function SerifFont() {
+            this.name = "serif-font";
+            this.label = "Serif";
+        }
+        SerifFont.prototype.start = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.setAttr(rootFrame, "data-viewer-font", "serif");
+            HTMLUtilities.createStylesheet(rootFrame, "serif-font-internal", "* {font-family: 'Iowan Old Style', 'Sitka Text', Palatino, 'Book Antiqua', serif !important;}");
+        };
+        SerifFont.prototype.stop = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.removeAttr(rootFrame, "data-viewer-font");
+            HTMLUtilities.removeStylesheet(rootFrame, "serif-font-internal");
+        };
+        return SerifFont;
+    }());
+    exports.default = SerifFont;
+});
+define("SansFont", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var SansFont = /** @class */ (function () {
+        function SansFont() {
+            this.name = "sans-font";
+            this.label = "Sans-serif";
+        }
+        SansFont.prototype.start = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.setAttr(rootFrame, "data-viewer-font", "sans");
+            HTMLUtilities.createStylesheet(rootFrame, "sans-font-internal", "* {font-family: Seravek, Calibri, Roboto, Arial, sans-serif !important;}");
+        };
+        SansFont.prototype.stop = function () {
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.removeAttr(rootFrame, "data-viewer-font");
+            HTMLUtilities.removeStylesheet(rootFrame, "sans-font-internal");
+        };
+        return SansFont;
+    }());
+    exports.default = SansFont;
+});
+define("SepiaTheme", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var SepiaTheme = /** @class */ (function () {
+        function SepiaTheme() {
+            this.name = "sepia-theme";
+            this.label = "Sepia";
+        }
+        SepiaTheme.prototype.start = function () {
+            var rootElement = document.documentElement;
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.setAttr(rootElement, "data-viewer-theme", "sepia");
+            HTMLUtilities.createStylesheet(rootFrame, "sepia-mode-internal", ":root {background-color: #f6ecd9 !important}  img, svg {background-color: transparent !important; mix-blend-mode: multiply;}");
+        };
+        SepiaTheme.prototype.stop = function () {
+            var rootElement = document.documentElement;
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.removeAttr(rootElement, "data-viewer-theme");
+            HTMLUtilities.removeStylesheet(rootFrame, "sepia-mode-internal");
+        };
+        return SepiaTheme;
+    }());
+    exports.default = SepiaTheme;
+});
+define("NightTheme", ["require", "exports", "HTMLUtilities"], function (require, exports, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var NightTheme = /** @class */ (function () {
+        function NightTheme() {
+            this.name = "night-theme";
+            this.label = "Night";
+        }
+        NightTheme.prototype.start = function () {
+            var rootElement = document.documentElement;
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.setAttr(rootElement, "data-viewer-theme", "night");
+            HTMLUtilities.createStylesheet(rootFrame, "night-mode-internal", ":root {background-color: #111 !important; color: #FFFFFF !important} :not(a) {background-color: transparent !important; color: #FFFFFF !important; border-color: currentColor !important;} a {color: #53CEEA !important;}");
+        };
+        NightTheme.prototype.stop = function () {
+            var rootElement = document.documentElement;
+            var rootFrame = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "html");
+            HTMLUtilities.removeAttr(rootElement, "data-viewer-theme");
+            HTMLUtilities.removeStylesheet(rootFrame, "night-mode-internal");
+        };
+        return NightTheme;
+    }());
+    exports.default = NightTheme;
+});
+define("ScrollingBookView", ["require", "exports", "BrowserUtilities", "HTMLUtilities"], function (require, exports, BrowserUtilities, HTMLUtilities) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var ScrollingBookView = /** @class */ (function () {
+        function ScrollingBookView() {
+            this.name = "scrolling-book-view";
+            this.label = "Scrolling";
+            this.sideMargin = 0;
+            this.height = 0;
+        }
+        ScrollingBookView.prototype.setIFrameSize = function () {
+            // Remove previous iframe height so body scroll height will be accurate.
+            this.bookElement.style.height = "";
+            this.bookElement.style.width = BrowserUtilities.getWidth() + "px";
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            var width = (BrowserUtilities.getWidth() - this.sideMargin * 2) + "px";
+            body.style.width = width;
+            body.style.marginLeft = this.sideMargin + "px";
+            body.style.marginRight = this.sideMargin + "px";
+            var minHeight = this.height;
+            var bodyHeight = body.scrollHeight;
+            this.bookElement.style.height = Math.max(minHeight, bodyHeight) + "px";
+            var images = Array.prototype.slice.call(body.querySelectorAll("img"));
+            for (var _i = 0, images_3 = images; _i < images_3.length; _i++) {
+                var image = images_3[_i];
+                image.style.maxWidth = width;
+            }
+        };
+        ScrollingBookView.prototype.start = function (position) {
+            this.goToPosition(position);
+        };
+        ScrollingBookView.prototype.stop = function () {
+            this.bookElement.style.height = "";
+            this.bookElement.style.width = "";
+            var body = HTMLUtilities.findRequiredIframeElement(this.bookElement.contentDocument, "body");
+            body.style.width = "";
+            body.style.marginLeft = "";
+            body.style.marginRight = "";
+            var images = Array.prototype.slice.call(body.querySelectorAll("img"));
+            for (var _i = 0, images_4 = images; _i < images_4.length; _i++) {
+                var image = images_4[_i];
+                image.style.maxWidth = "";
+            }
+        };
+        ScrollingBookView.prototype.getCurrentPosition = function () {
+            return document.body.scrollTop / document.body.scrollHeight;
+        };
+        ScrollingBookView.prototype.atBottom = function () {
+            return (document.body.scrollHeight - document.body.scrollTop) === BrowserUtilities.getHeight();
+        };
+        ScrollingBookView.prototype.goToPosition = function (position) {
+            this.setIFrameSize();
+            document.body.scrollTop = document.body.scrollHeight * position;
+        };
+        ScrollingBookView.prototype.goToElement = function (elementId) {
+            var element = this.bookElement.contentDocument.getElementById(elementId);
+            if (element) {
+                // Put the element as close to the top as possible.
+                element.scrollIntoView();
+                // Unless we're already at the bottom, scroll up so the element is
+                // in the middle, and not covered by the top nav.
+                if ((document.body.scrollHeight - element.offsetTop) >= this.height) {
+                    document.body.scrollTop = Math.max(0, document.body.scrollTop - this.height / 3);
+                }
+            }
+        };
+        return ScrollingBookView;
+    }());
+    exports.default = ScrollingBookView;
+});
+define("Manifest", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var Manifest = /** @class */ (function () {
+        function Manifest(manifestJSON, manifestUrl) {
+            this.metadata = manifestJSON.metadata || {};
+            this.links = manifestJSON.links || [];
+            this.spine = (manifestJSON.readingOrder || manifestJSON.spine) || [];
+            this.resources = manifestJSON.resources || [];
+            this.toc = manifestJSON.toc || [];
+            this.manifestUrl = manifestUrl;
+        }
+        Manifest.getManifest = function (manifestUrl, store) {
+            return __awaiter(this, void 0, void 0, function () {
+                var fetchManifest, tryToUpdateManifestButIgnoreResult, manifestString, manifestJSON;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            fetchManifest = function () { return __awaiter(_this, void 0, void 0, function () {
+                                var response, manifestJSON;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, window.fetch(manifestUrl.href)];
+                                        case 1:
+                                            response = _a.sent();
+                                            return [4 /*yield*/, response.json()];
+                                        case 2:
+                                            manifestJSON = _a.sent();
+                                            if (!store) return [3 /*break*/, 4];
+                                            return [4 /*yield*/, store.set("manifest", JSON.stringify(manifestJSON))];
+                                        case 3:
+                                            _a.sent();
+                                            _a.label = 4;
+                                        case 4: return [2 /*return*/, new Manifest(manifestJSON, manifestUrl)];
+                                    }
+                                });
+                            }); };
+                            tryToUpdateManifestButIgnoreResult = function () { return __awaiter(_this, void 0, void 0, function () {
+                                var err_1;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            _a.trys.push([0, 2, , 3]);
+                                            return [4 /*yield*/, fetchManifest()];
+                                        case 1:
+                                            _a.sent();
+                                            return [3 /*break*/, 3];
+                                        case 2:
+                                            err_1 = _a.sent();
+                                            return [3 /*break*/, 3];
+                                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
+                                    }
+                                });
+                            }); };
+                            if (!store) return [3 /*break*/, 2];
+                            return [4 /*yield*/, store.get("manifest")];
+                        case 1:
+                            manifestString = _a.sent();
+                            if (manifestString) {
+                                // Kick off a fetch to update the store for next time,
+                                // but don't await it.
+                                tryToUpdateManifestButIgnoreResult();
+                                manifestJSON = JSON.parse(manifestString);
+                                return [2 /*return*/, new Manifest(manifestJSON, manifestUrl)];
+                            }
+                            _a.label = 2;
+                        case 2: return [2 /*return*/, fetchManifest()];
+                    }
+                });
+            });
+        };
+        Manifest.prototype.getStartLink = function () {
+            if (this.spine.length > 0) {
+                return this.spine[0];
+            }
+            return null;
+        };
+        Manifest.prototype.getPreviousSpineItem = function (href) {
+            var index = this.getSpineIndex(href);
+            if (index !== null && index > 0) {
+                return this.spine[index - 1];
+            }
+            return null;
+        };
+        Manifest.prototype.getNextSpineItem = function (href) {
+            var index = this.getSpineIndex(href);
+            if (index !== null && index < (this.spine.length - 1)) {
+                return this.spine[index + 1];
+            }
+            return null;
+        };
+        Manifest.prototype.getSpineItem = function (href) {
+            var index = this.getSpineIndex(href);
+            if (index !== null) {
+                return this.spine[index];
+            }
+            return null;
+        };
+        Manifest.prototype.getSpineIndex = function (href) {
+            for (var index = 0; index < this.spine.length; index++) {
+                var item = this.spine[index];
+                if (item.href) {
+                    var itemUrl = new URL(item.href, this.manifestUrl.href).href;
+                    if (itemUrl === href) {
+                        return index;
+                    }
+                }
+            }
+            return null;
+        };
+        Manifest.prototype.getTOCItem = function (href) {
+            var _this = this;
+            var findItem = function (href, links) {
+                for (var index = 0; index < links.length; index++) {
+                    var item = links[index];
+                    if (item.href) {
+                        var itemUrl = new URL(item.href, _this.manifestUrl.href).href;
+                        if (itemUrl === href) {
+                            return item;
+                        }
+                    }
+                    if (item.children) {
+                        var childItem = findItem(href, item.children);
+                        if (childItem !== null) {
+                            return childItem;
+                        }
+                    }
+                }
+                return null;
+            };
+            return findItem(href, this.toc);
+        };
+        return Manifest;
+    }());
+    exports.default = Manifest;
+});
+define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHandler", "BrowserUtilities", "HTMLUtilities", "IconLib"], function (require, exports, Cacher_1, Manifest_1, EventHandler_1, BrowserUtilities, HTMLUtilities, IconLib) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var epubReadingSystemObject = {
+        name: "Webpub viewer",
+        version: "0.1.0"
+    };
+    var epubReadingSystem = Object.freeze(epubReadingSystemObject);
+    var upLinkTemplate = function (href, label, ariaLabel) { return "\n  <a rel=\"up\" href='" + href + "' aria-label=\"" + ariaLabel + "\">\n    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + IconLib.WIDTH_ATTR + "\" height=\"" + IconLib.HEIGHT_ATTR + "\" viewBox=\"" + IconLib.VIEWBOX_ATTR + "\" aria-labelledby=\"up-label\" preserveAspectRatio=\"xMidYMid meet\" role=\"img\" class=\"icon\">\n      <title id=\"up-label\">" + label + "</title>\n      " + IconLib.icons.home + "\n    </svg>\n    <span class=\"setting-text up\">" + label + "</span>\n  </a>\n"; };
+    var template = "\n  <nav class=\"publication\">\n    <div class=\"controls-trigger\">\n      <button class=\"trigger\" aria-haspopup=\"true\" aria-expanded=\"true\">\n        " + IconLib.icons.menu + "\n      </button>\n    </div>\n    <div class=\"controls\">\n        " + IconLib.icons.closeOriginal + "\n        " + IconLib.icons.checkOriginal + "\n      <a href=\"#settings-control\" class=\"scrolling-suggestion\" style=\"display: none\">\n          We recommend scrolling mode for use with screen readers and keyboard navigation.\n          Go to settings to switch to scrolling mode.\n      </a>\n      <ul class=\"links top active\">\n        <li>\n          <button class=\"contents disabled\" aria-labelledby=\"contents-label\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            " + IconLib.icons.toc + "\n            " + IconLib.icons.closeDupe + "\n            <span class=\"setting-text contents\" id=\"contents-label\">Contents</span>\n          </button>\n          <div class=\"contents-view controls-view inactive\" aria-hidden=\"true\"></div>\n        </li>\n        <li>\n          <button id=\"settings-control\" class=\"settings\" aria-labelledby=\"settings-label\" aria-expanded=\"false\" aria-haspopup=\"true\">\n            " + IconLib.icons.settings + "\n            " + IconLib.icons.closeDupe + "\n            <span class=\"setting-text settings\" id=\"settings-label\">Settings</span>\n          </button>\n          <div class=\"settings-view controls-view inactive\" aria-hidden=\"true\"></div>\n        </li>\n      </ul>\n    </div>\n    <!-- /controls -->\n  </nav>\n  <main style=\"overflow: hidden\" tabindex=-1>\n    <div class=\"loading\" style=\"display:none;\">\n      " + IconLib.icons.loading + "\n    </div>\n    <div class=\"error\" style=\"display:none;\">\n      <span>\n        " + IconLib.icons.error + "\n      </span>\n      <span>There was an error loading this page.</span>\n      <button class=\"try-again\">Try again</button>\n    </div>\n    <div class=\"info top\">\n      <span class=\"book-title\"></span>\n    </div>\n    <iframe allowtransparency=\"true\" title=\"book text\" style=\"border:0; overflow: hidden;\"></iframe>\n    <div class=\"info bottom\">\n      <span class=\"chapter-position\"></span>\n      <span class=\"chapter-title\"></span>\n    </div>\n  </main>\n  <nav class=\"publication\">\n    <div class=\"controls\">\n      <ul class=\"links bottom active\">\n        <li>\n          <a rel=\"prev\" class=\"disabled\" role=\"button\" aria-labelledby=\"previous-label\">\n          " + IconLib.icons.previous + "\n          <span class=\"chapter-control\" id=\"previous-label\">Previous Chapter</span>\n          </a>\n        </li>\n        <li aria-label=\"chapters\">Chapters</li>\n        <li>\n          <a rel=\"next\" class=\"disabled\" role=\"button\" aria-labelledby=\"next-label\">\n            <span class=\"chapter-control\" id =\"next-label\">Next Chapter</span>\n            " + IconLib.icons.next + "\n          </a>\n        </li>\n      </ul>\n    </div>\n    <!-- /controls -->\n  </nav>\n";
     /** Class that shows webpub resources in an iframe, with navigation controls outside the iframe. */
-    var IFrameNavigator = (function () {
-        function IFrameNavigator(store, cacher, settings, annotator, paginator, scroller, eventHandler, upLinkConfig) {
+    var IFrameNavigator = /** @class */ (function () {
+        function IFrameNavigator(store, cacher, settings, annotator, publisher, serif, sans, day, sepia, night, paginator, scroller, eventHandler, upLinkConfig, allowFullscreen) {
+            if (cacher === void 0) { cacher = null; }
             if (annotator === void 0) { annotator = null; }
+            if (publisher === void 0) { publisher = null; }
+            if (serif === void 0) { serif = null; }
+            if (sans === void 0) { sans = null; }
+            if (day === void 0) { day = null; }
+            if (sepia === void 0) { sepia = null; }
+            if (night === void 0) { night = null; }
             if (paginator === void 0) { paginator = null; }
             if (scroller === void 0) { scroller = null; }
             if (eventHandler === void 0) { eventHandler = null; }
             if (upLinkConfig === void 0) { upLinkConfig = null; }
+            if (allowFullscreen === void 0) { allowFullscreen = null; }
             this.upLink = null;
+            this.fullscreen = null;
+            this.canFullscreen = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled;
             this.store = store;
             this.cacher = cacher;
+            this.settings = settings;
+            this.annotator = annotator;
+            this.publisher = publisher;
+            this.serif = serif;
+            this.sans = sans;
+            this.day = day;
+            this.sepia = sepia;
+            this.night = night;
             this.paginator = paginator;
             this.scroller = scroller;
-            this.annotator = annotator;
-            this.settings = settings;
             this.eventHandler = eventHandler || new EventHandler_1.default();
             this.upLinkConfig = upLinkConfig;
+            this.allowFullscreen = allowFullscreen;
         }
         IFrameNavigator.create = function (config) {
             return __awaiter(this, void 0, void 0, function () {
@@ -1211,7 +1539,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            navigator = new this(config.store, config.cacher, config.settings, config.annotator || null, config.paginator || null, config.scroller || null, config.eventHandler || null, config.upLink || null);
+                            navigator = new this(config.store, config.cacher || null, config.settings, config.annotator || null, config.publisher || null, config.serif || null, config.sans || null, config.day || null, config.sepia || null, config.night || null, config.paginator || null, config.scroller || null, config.eventHandler || null, config.upLink || null, config.allowFullscreen || null);
                             return [4 /*yield*/, navigator.start(config.element, config.manifestUrl)];
                         case 1:
                             _a.sent();
@@ -1222,7 +1550,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
         };
         IFrameNavigator.prototype.start = function (element, manifestUrl) {
             return __awaiter(this, void 0, void 0, function () {
-                var settingsButtons, lastSettingsButton, err_4;
+                var settingsButtons, lastSettingsButton, err_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -1249,10 +1577,30 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                             this.bookTitle = HTMLUtilities.findRequiredElement(this.infoTop, "span[class=book-title]");
                             this.chapterTitle = HTMLUtilities.findRequiredElement(this.infoBottom, "span[class=chapter-title]");
                             this.chapterPosition = HTMLUtilities.findRequiredElement(this.infoBottom, "span[class=chapter-position]");
+                            this.menuControl = HTMLUtilities.findRequiredElement(element, "button.trigger");
                             this.newPosition = null;
                             this.newElementId = null;
+                            this.isBeingStyled = true;
                             this.isLoading = true;
                             this.setupEvents();
+                            if (this.publisher) {
+                                this.publisher.bookElement = this.iframe;
+                            }
+                            if (this.serif) {
+                                this.serif.bookElement = this.iframe;
+                            }
+                            if (this.sans) {
+                                this.sans.bookElement = this.iframe;
+                            }
+                            if (this.day) {
+                                this.day.bookElement = this.iframe;
+                            }
+                            if (this.sepia) {
+                                this.sepia.bookElement = this.iframe;
+                            }
+                            if (this.night) {
+                                this.night.bookElement = this.iframe;
+                            }
                             if (this.paginator) {
                                 this.paginator.bookElement = this.iframe;
                             }
@@ -1260,43 +1608,60 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                                 this.scroller.bookElement = this.iframe;
                             }
                             this.settings.renderControls(this.settingsView);
-                            this.settings.onViewChange(this.updateBookView.bind(this));
+                            this.settings.onFontChange(this.updateFont.bind(this));
                             this.settings.onFontSizeChange(this.updateFontSize.bind(this));
+                            this.settings.onViewChange(this.updateBookView.bind(this));
                             settingsButtons = this.settingsView.querySelectorAll("button");
                             if (settingsButtons && settingsButtons.length > 0) {
                                 lastSettingsButton = settingsButtons[settingsButtons.length - 1];
                                 this.setupModalFocusTrap(this.settingsView, this.settingsControl, lastSettingsButton);
                             }
-                            this.cacher.onStatusUpdate(this.updateOfflineCacheStatus.bind(this));
-                            this.enableOffline();
+                            if (this.cacher) {
+                                this.cacher.onStatusUpdate(this.updateOfflineCacheStatus.bind(this));
+                                this.enableOffline();
+                            }
                             if (this.scroller && (this.settings.getSelectedView() !== this.scroller)) {
                                 this.scrollingSuggestion.style.display = "block";
                             }
                             return [4 /*yield*/, this.loadManifest()];
                         case 2: return [2 /*return*/, _a.sent()];
                         case 3:
-                            err_4 = _a.sent();
+                            err_2 = _a.sent();
                             // There's a mismatch between the template and the selectors above,
                             // or we weren't able to insert the template in the element.
-                            return [2 /*return*/, new Promise(function (_, reject) { return reject(err_4); })];
+                            return [2 /*return*/, new Promise(function (_, reject) { return reject(err_2); }).catch(function () { })];
                         case 4: return [2 /*return*/];
                     }
                 });
             });
         };
         IFrameNavigator.prototype.setupEvents = function () {
+            var _this = this;
             this.iframe.addEventListener("load", this.handleIFrameLoad.bind(this));
-            window.onresize = this.handleResize.bind(this);
+            var delay = 200;
+            var timeout;
+            window.addEventListener("resize", function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(_this.handleResize.bind(_this), delay);
+            });
             this.previousChapterLink.addEventListener("click", this.handlePreviousChapterClick.bind(this));
             this.nextChapterLink.addEventListener("click", this.handleNextChapterClick.bind(this));
             this.contentsControl.addEventListener("click", this.handleContentsClick.bind(this));
             this.settingsControl.addEventListener("click", this.handleSettingsClick.bind(this));
             this.settingsView.addEventListener("click", this.handleToggleLinksClick.bind(this));
             this.tryAgainButton.addEventListener("click", this.tryAgain.bind(this));
+            this.menuControl.addEventListener("click", this.handleToggleLinksClick.bind(this));
             this.contentsControl.addEventListener("keydown", this.hideTOCOnEscape.bind(this));
             this.tocView.addEventListener("keydown", this.hideTOCOnEscape.bind(this));
             this.settingsControl.addEventListener("keydown", this.hideSettingsOnEscape.bind(this));
             this.settingsView.addEventListener("keydown", this.hideSettingsOnEscape.bind(this));
+            window.addEventListener("keydown", this.handleKeyboardNavigation.bind(this));
+            if (this.allowFullscreen && this.canFullscreen) {
+                document.addEventListener("fullscreenchange", this.toggleFullscreenIcon.bind(this));
+                document.addEventListener("webkitfullscreenchange", this.toggleFullscreenIcon.bind(this));
+                document.addEventListener("mozfullscreenchange", this.toggleFullscreenIcon.bind(this));
+                document.addEventListener("MSFullscreenChange", this.toggleFullscreenIcon.bind(this));
+            }
         };
         IFrameNavigator.prototype.setupModalFocusTrap = function (modal, closeButton, lastFocusableElement) {
             var _this = this;
@@ -1327,6 +1692,25 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                 }
             });
         };
+        IFrameNavigator.prototype.handleKeyboardNavigation = function (event) {
+            var LEFT_ARROW = 37;
+            var RIGHT_ARROW = 39;
+            if (this.settings.getSelectedView() === this.paginator) {
+                if (event.keyCode === LEFT_ARROW) {
+                    this.handlePreviousPageClick(event);
+                }
+                else if (event.keyCode === RIGHT_ARROW) {
+                    this.handleNextPageClick(event);
+                }
+            }
+        };
+        ;
+        IFrameNavigator.prototype.updateFont = function () {
+            this.handleResize();
+        };
+        IFrameNavigator.prototype.updateFontSize = function () {
+            this.handleResize();
+        };
         IFrameNavigator.prototype.updateBookView = function () {
             var _this = this;
             var doNothing = function () { };
@@ -1344,6 +1728,9 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                     this.eventHandler.onLeftHover = this.handleLeftHover.bind(this);
                     this.eventHandler.onRightHover = this.handleRightHover.bind(this);
                     this.eventHandler.onRemoveHover = this.handleRemoveHover.bind(this);
+                    this.eventHandler.onInternalLink = this.handleInternalLink.bind(this);
+                    this.eventHandler.onLeftArrow = this.handleKeyboardNavigation.bind(this);
+                    this.eventHandler.onRightArrow = this.handleKeyboardNavigation.bind(this);
                 }
                 if (this.isDisplayed(this.linksBottom)) {
                     this.toggleDisplay(this.linksBottom);
@@ -1379,6 +1766,9 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                     this.eventHandler.onLeftHover = doNothing;
                     this.eventHandler.onRightHover = doNothing;
                     this.eventHandler.onRemoveHover = doNothing;
+                    this.eventHandler.onInternalLink = doNothing;
+                    this.eventHandler.onLeftArrow = doNothing;
+                    this.eventHandler.onRightArrow = doNothing;
                     this.handleRemoveHover();
                 }
                 if (this.isDisplayed(this.links) && !this.isDisplayed(this.linksBottom)) {
@@ -1387,66 +1777,82 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             }
             this.updatePositionInfo();
         };
-        IFrameNavigator.prototype.updateFontSize = function () {
-            this.handleResize();
-        };
         IFrameNavigator.prototype.enableOffline = function () {
-            if (this.cacher.getStatus() !== Cacher_3.CacheStatus.Downloaded) {
+            if (this.cacher && this.cacher.getStatus() !== Cacher_1.CacheStatus.Downloaded) {
                 this.cacher.enable();
             }
         };
         IFrameNavigator.prototype.updateOfflineCacheStatus = function (status) {
             var statusElement = this.settings.getOfflineStatusElement();
             var statusMessage = "";
-            if (status === Cacher_3.CacheStatus.Uncached) {
+            if (status === Cacher_1.CacheStatus.Uncached) {
                 statusMessage = "";
             }
-            else if (status === Cacher_3.CacheStatus.UpdateAvailable) {
+            else if (status === Cacher_1.CacheStatus.UpdateAvailable) {
                 statusMessage = "A new version is available. Refresh to update.";
             }
-            else if (status === Cacher_3.CacheStatus.CheckingForUpdate) {
+            else if (status === Cacher_1.CacheStatus.CheckingForUpdate) {
                 statusMessage = "Checking for update.";
             }
-            else if (status === Cacher_3.CacheStatus.Downloading) {
+            else if (status === Cacher_1.CacheStatus.Downloading) {
                 statusMessage = "Downloading...";
             }
-            else if (status === Cacher_3.CacheStatus.Downloaded) {
+            else if (status === Cacher_1.CacheStatus.Downloaded) {
                 statusMessage = "Downloaded for offline use";
             }
-            else if (status === Cacher_3.CacheStatus.Error) {
+            else if (status === Cacher_1.CacheStatus.Error) {
                 statusMessage = "Error downloading for offline use";
             }
             statusElement.innerHTML = statusMessage;
         };
         IFrameNavigator.prototype.loadManifest = function () {
             return __awaiter(this, void 0, void 0, function () {
+                var manifest, toc, createTOC_1, upUrl, upLabel, upAriaLabel, upHTML, upParent, fullscreenHTML, fullscreenParent, lastReadingPosition, startLink, startUrl, position;
                 var _this = this;
-                var manifest, toc, createTOC_1, upUrl, upLabel, upAriaLabel, upHTML, upParent, lastReadingPosition, startLink, startUrl, position;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, Manifest_2.default.getManifest(this.manifestUrl, this.store)];
+                        case 0: return [4 /*yield*/, Manifest_1.default.getManifest(this.manifestUrl, this.store)];
                         case 1:
                             manifest = _a.sent();
                             toc = manifest.toc;
                             if (toc.length) {
                                 this.contentsControl.className = "contents";
                                 createTOC_1 = function (parentElement, links) {
-                                    var listElement = document.createElement("ul");
+                                    var listElement = document.createElement("ol");
                                     var lastLink = null;
-                                    var _loop_2 = function (link) {
+                                    for (var _i = 0, links_1 = links; _i < links_1.length; _i++) {
+                                        var link = links_1[_i];
                                         var listItemElement = document.createElement("li");
                                         var linkElement = document.createElement("a");
+                                        var spanElement = document.createElement("span");
                                         linkElement.tabIndex = -1;
                                         var href = "";
                                         if (link.href) {
                                             href = new URL(link.href, _this.manifestUrl.href).href;
+                                            linkElement.href = href;
+                                            linkElement.innerHTML = link.title || "";
+                                            listItemElement.appendChild(linkElement);
                                         }
-                                        linkElement.href = href;
-                                        linkElement.innerHTML = link.title || "";
-                                        linkElement.addEventListener("click", function (event) {
-                                            event.preventDefault();
-                                            event.stopPropagation();
-                                            if (event.currentTarget.className.indexOf("active") !== -1) {
+                                        else {
+                                            spanElement.innerHTML = link.title || "";
+                                            listItemElement.appendChild(spanElement);
+                                        }
+                                        if (link.children && link.children.length > 0) {
+                                            createTOC_1(listItemElement, link.children);
+                                        }
+                                        listElement.appendChild(listItemElement);
+                                        lastLink = linkElement;
+                                    }
+                                    // Trap keyboard focus inside the TOC while it's open.
+                                    if (lastLink) {
+                                        _this.setupModalFocusTrap(_this.tocView, _this.contentsControl, lastLink);
+                                    }
+                                    listElement.addEventListener("click", function (event) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        if (event.target && event.target.tagName.toLowerCase() === "a") {
+                                            var linkElement = event.target;
+                                            if (linkElement.className.indexOf("active") !== -1) {
                                                 // This TOC item is already loaded. Hide the TOC
                                                 // but don't navigate.
                                                 _this.hideTOC();
@@ -1460,22 +1866,8 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                                                     position: 0
                                                 });
                                             }
-                                        });
-                                        listItemElement.appendChild(linkElement);
-                                        if (link.children && link.children.length > 0) {
-                                            createTOC_1(listItemElement, link.children);
                                         }
-                                        listElement.appendChild(listItemElement);
-                                        lastLink = linkElement;
-                                    };
-                                    for (var _i = 0, links_1 = links; _i < links_1.length; _i++) {
-                                        var link = links_1[_i];
-                                        _loop_2(link);
-                                    }
-                                    // Trap keyboard focus inside the TOC while it's open.
-                                    if (lastLink) {
-                                        _this.setupModalFocusTrap(_this.tocView, _this.contentsControl, lastLink);
-                                    }
+                                    });
                                     parentElement.appendChild(listElement);
                                 };
                                 createTOC_1(this.tocView, toc);
@@ -1489,13 +1881,21 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                                 upAriaLabel = this.upLinkConfig.ariaLabel || upLabel;
                                 upHTML = upLinkTemplate(upUrl.href, upLabel, upAriaLabel);
                                 upParent = document.createElement("li");
+                                upParent.classList.add("uplink-wrapper");
                                 upParent.innerHTML = upHTML;
                                 this.links.insertBefore(upParent, this.links.firstChild);
                                 this.upLink = HTMLUtilities.findRequiredElement(this.links, "a[rel=up]");
                             }
+                            if (this.allowFullscreen && this.canFullscreen) {
+                                fullscreenHTML = "<button id=\"fullscreen-control\" class=\"fullscreen\" aria-hidden=\"false\">" + IconLib.icons.expand + " " + IconLib.icons.minimize + "</button>";
+                                fullscreenParent = document.createElement("li");
+                                fullscreenParent.innerHTML = fullscreenHTML;
+                                this.links.appendChild(fullscreenParent);
+                                this.fullscreen = HTMLUtilities.findRequiredElement(this.links, "#fullscreen-control");
+                                this.fullscreen.addEventListener("click", this.toggleFullscreen.bind(this));
+                            }
                             lastReadingPosition = null;
-                            if (!this.annotator)
-                                return [3 /*break*/, 3];
+                            if (!this.annotator) return [3 /*break*/, 3];
                             return [4 /*yield*/, this.annotator.getLastReadingPosition()];
                         case 2:
                             lastReadingPosition = (_a.sent());
@@ -1523,7 +1923,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
         };
         IFrameNavigator.prototype.handleIFrameLoad = function () {
             return __awaiter(this, void 0, void 0, function () {
-                var bookViewPosition, currentLocation, elementId, manifest, previous, next, chapterTitle, spineItem, tocItem, err_5;
+                var bookViewPosition, currentLocation, elementId, manifest, previous, next, chapterTitle, spineItem, tocItem, err_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -1538,8 +1938,11 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                                 bookViewPosition = this.newPosition.position;
                                 this.newPosition = null;
                             }
-                            this.updateBookView();
+                            this.updateFont();
                             this.updateFontSize();
+                            this.updateBookView();
+                            this.settings.getSelectedFont().start();
+                            this.settings.getSelectedTheme().start();
                             this.settings.getSelectedView().start(bookViewPosition);
                             if (this.newElementId) {
                                 this.settings.getSelectedView().goToElement(this.newElementId);
@@ -1558,7 +1961,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                                 return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
                             }
                             this.updatePositionInfo();
-                            return [4 /*yield*/, Manifest_2.default.getManifest(this.manifestUrl, this.store)];
+                            return [4 /*yield*/, Manifest_1.default.getManifest(this.manifestUrl, this.store)];
                         case 2:
                             manifest = _a.sent();
                             previous = manifest.getPreviousSpineItem(currentLocation);
@@ -1569,6 +1972,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                             else {
                                 this.previousChapterLink.removeAttribute("href");
                                 this.previousChapterLink.className = "disabled";
+                                this.handleRemoveHover();
                             }
                             next = manifest.getNextSpineItem(currentLocation);
                             if (next && next.href) {
@@ -1578,6 +1982,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                             else {
                                 this.nextChapterLink.removeAttribute("href");
                                 this.nextChapterLink.className = "disabled";
+                                this.handleRemoveHover();
                             }
                             this.setActiveTOCItem(currentLocation);
                             if (manifest.metadata.title) {
@@ -1603,19 +2008,20 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                             if (this.eventHandler) {
                                 this.eventHandler.setupEvents(this.iframe.contentDocument);
                             }
-                            if (!this.annotator)
-                                return [3 /*break*/, 4];
+                            if (!this.annotator) return [3 /*break*/, 4];
                             return [4 /*yield*/, this.saveCurrentReadingPosition()];
                         case 3:
                             _a.sent();
                             _a.label = 4;
                         case 4:
                             this.hideLoadingMessage();
+                            this.showIframeContents();
+                            Object.defineProperty(this.iframe.contentWindow.navigator, "epubReadingSystem", { value: epubReadingSystem, writable: false });
                             return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
                         case 5:
-                            err_5 = _a.sent();
+                            err_3 = _a.sent();
                             this.errorMessage.style.display = "block";
-                            return [2 /*return*/, new Promise(function (_, reject) { return reject(); })];
+                            return [2 /*return*/, new Promise(function (_, reject) { return reject(err_3); }).catch(function () { })];
                         case 6: return [2 /*return*/];
                     }
                 });
@@ -1697,6 +2103,9 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             if (this.upLink) {
                 this.upLink.setAttribute("aria-hidden", "true");
             }
+            if (this.fullscreen) {
+                this.fullscreen.setAttribute("aria-hidden", "true");
+            }
             this.contentsControl.setAttribute("aria-hidden", "true");
             this.settingsControl.setAttribute("aria-hidden", "true");
             this.linksBottom.setAttribute("aria-hidden", "true");
@@ -1716,6 +2125,9 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             if (this.upLink) {
                 this.upLink.setAttribute("aria-hidden", "false");
             }
+            if (this.fullscreen) {
+                this.fullscreen.setAttribute("aria-hidden", "false");
+            }
             this.contentsControl.setAttribute("aria-hidden", "false");
             this.settingsControl.setAttribute("aria-hidden", "false");
             this.linksBottom.setAttribute("aria-hidden", "false");
@@ -1724,6 +2136,34 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             this.infoTop.setAttribute("aria-hidden", "false");
             this.infoBottom.setAttribute("aria-hidden", "false");
             this.hideElement(modal, control);
+        };
+        IFrameNavigator.prototype.toggleFullscreenIcon = function () {
+            if (this.fullscreen) {
+                var activeIcon = this.fullscreen.querySelector(".icon.active-icon");
+                var inactiveIcon = this.fullscreen.querySelector(".icon.inactive-icon");
+                if (activeIcon && (activeIcon.getAttribute("class") || "").indexOf(" inactive-icon") === -1) {
+                    var newIconClass = "icon inactive-icon";
+                    activeIcon.setAttribute("class", newIconClass);
+                }
+                if (inactiveIcon) {
+                    var newIconClass = "icon active-icon";
+                    inactiveIcon.setAttribute("class", newIconClass);
+                }
+            }
+        };
+        IFrameNavigator.prototype.toggleFullscreen = function () {
+            if (this.fullscreen) {
+                var doc = document;
+                var docEl = document.documentElement;
+                var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+                var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+                if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                    requestFullScreen.call(docEl);
+                }
+                else {
+                    cancelFullScreen.call(doc);
+                }
+            }
         };
         IFrameNavigator.prototype.toggleDisplay = function (element, control) {
             if (!this.isDisplayed(element)) {
@@ -1744,7 +2184,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
         IFrameNavigator.prototype.handleToggleLinksClick = function (event) {
             this.hideTOC();
             this.hideSettings();
-            this.toggleDisplay(this.links);
+            this.toggleDisplay(this.links, this.menuControl);
             if (this.settings.getSelectedView() === this.scroller) {
                 if (!this.scroller.atBottom()) {
                     this.toggleDisplay(this.linksBottom);
@@ -1794,21 +2234,57 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             }
         };
         IFrameNavigator.prototype.handleLeftHover = function () {
-            this.iframe.className = "left-hover";
+            if (this.paginator) {
+                if (this.paginator.onFirstPage() && !this.previousChapterLink.hasAttribute("href")) {
+                    this.iframe.className = "";
+                }
+                else {
+                    this.iframe.className = "left-hover";
+                }
+            }
         };
         IFrameNavigator.prototype.handleRightHover = function () {
-            this.iframe.className = "right-hover";
+            if (this.paginator) {
+                if (this.paginator.onLastPage() && !this.nextChapterLink.hasAttribute("href")) {
+                    this.iframe.className = "";
+                }
+                else {
+                    this.iframe.className = "right-hover";
+                }
+            }
         };
         IFrameNavigator.prototype.handleRemoveHover = function () {
             this.iframe.className = "";
+        };
+        IFrameNavigator.prototype.handleInternalLink = function (event) {
+            var element = event.target;
+            var currentLocation = this.iframe.src.split("#")[0];
+            if (this.iframe.contentDocument && this.iframe.contentDocument.location && this.iframe.contentDocument.location.href) {
+                currentLocation = this.iframe.contentDocument.location.href.split("#")[0];
+            }
+            if (element && element.tagName.toLowerCase() === "a") {
+                if (element.href.split("#")[0] === currentLocation) {
+                    var elementId = element.href.split("#")[1];
+                    this.settings.getSelectedView().goToElement(elementId, true);
+                    this.updatePositionInfo();
+                    this.saveCurrentReadingPosition();
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            }
         };
         IFrameNavigator.prototype.handleResize = function () {
             var selectedView = this.settings.getSelectedView();
             var oldPosition = selectedView.getCurrentPosition();
             var fontSize = this.settings.getSelectedFontSize();
-            var body = HTMLUtilities.findRequiredElement(this.iframe.contentDocument, "body");
+            var body = HTMLUtilities.findRequiredIframeElement(this.iframe.contentDocument, "body");
             body.style.fontSize = fontSize;
             body.style.lineHeight = "1.5";
+            // Disable text selection as we can’t handle this correctly anyway
+            body.style.webkitUserSelect = "none";
+            body.style.MozUserSelect = "none";
+            body.style.msUserSelect = "none";
+            body.style.userSelect = "none";
             var fontSizeNumber = parseInt(fontSize.slice(0, -2));
             var sideMargin = fontSizeNumber * 2;
             if (BrowserUtilities.getWidth() > fontSizeNumber * 45) {
@@ -1915,7 +2391,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                 var item = allItems_1[_i];
                 item.className = "";
             }
-            var activeItem = this.tocView.querySelector('li > a[href="' + resource + '"]');
+            var activeItem = this.tocView.querySelector('li > a[href^="' + resource + '"]');
             if (activeItem) {
                 activeItem.className = "active";
             }
@@ -1936,6 +2412,7 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
             }
         };
         IFrameNavigator.prototype.navigate = function (readingPosition) {
+            this.hideIframeContents();
             this.showLoadingMessageAfterDelay();
             this.newPosition = readingPosition;
             if (readingPosition.resource.indexOf("#") === -1) {
@@ -1958,18 +2435,34 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
                 }
             }
         };
+        IFrameNavigator.prototype.showIframeContents = function () {
+            var _this = this;
+            this.isBeingStyled = false;
+            // We set a timeOut so that settings can be applied when opacity is still 0
+            setTimeout(function () {
+                if (!_this.isBeingStyled) {
+                    _this.iframe.style.opacity = "1";
+                }
+            }, 150);
+        };
         IFrameNavigator.prototype.showLoadingMessageAfterDelay = function () {
             var _this = this;
             this.isLoading = true;
             setTimeout(function () {
                 if (_this.isLoading) {
                     _this.loadingMessage.style.display = "block";
+                    _this.loadingMessage.classList.add("is-loading");
                 }
             }, 200);
+        };
+        IFrameNavigator.prototype.hideIframeContents = function () {
+            this.isBeingStyled = true;
+            this.iframe.style.opacity = "0";
         };
         IFrameNavigator.prototype.hideLoadingMessage = function () {
             this.isLoading = false;
             this.loadingMessage.style.display = "none";
+            this.loadingMessage.classList.remove("is-loading");
         };
         IFrameNavigator.prototype.saveCurrentReadingPosition = function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -1992,300 +2485,13 @@ define("IFrameNavigator", ["require", "exports", "Cacher", "Manifest", "EventHan
         };
         return IFrameNavigator;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /** Class that shows webpub resources in an iframe, with navigation controls outside the iframe. */
     exports.default = IFrameNavigator;
-});
-define("ColumnsPaginatedBookView", ["require", "exports", "HTMLUtilities", "BrowserUtilities"], function (require, exports, HTMLUtilities, BrowserUtilities) {
-    "use strict";
-    var ColumnsPaginatedBookView = (function () {
-        function ColumnsPaginatedBookView() {
-            this.name = "columns-paginated-view";
-            this.label = "Paginated";
-            this.sideMargin = 0;
-            this.height = 0;
-            this.hasFixedScrollWidth = false;
-        }
-        ColumnsPaginatedBookView.prototype.start = function (position) {
-            // any is necessary because CSSStyleDeclaration type does not include
-            // all the vendor-prefixed attributes.
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            body.style.columnCount = 1;
-            body.style.WebkitColumnCount = 1;
-            body.style.MozColumnCount = 1;
-            body.style.columnFill = "auto";
-            body.style.WebkitColumnFill = "auto";
-            body.style.MozColumnFill = "auto";
-            body.style.overflow = "hidden";
-            body.style.position = "relative";
-            this.setSize();
-            var viewportElement = document.createElement("meta");
-            viewportElement.name = "viewport";
-            viewportElement.content = "width=device-width, initial-scale=1, maximum-scale=1";
-            var head = HTMLUtilities.findElement(this.bookElement.contentDocument, "head");
-            if (head) {
-                head.appendChild(viewportElement);
-            }
-            this.checkForFixedScrollWidth();
-            this.goToPosition(position);
-            // This is delayed to prevent a bug in iOS 10.3 that causes
-            // the top links to be displayed in the middle of the page.
-            setTimeout(function () {
-                document.body.style.overflow = "hidden";
-                // This prevents overscroll/bouncing on iOS.
-                document.body.style.position = "fixed";
-                document.body.style.left = "0";
-                document.body.style.right = "0";
-                document.body.style.top = "0";
-                document.body.style.bottom = "0";
-            }, 0);
-        };
-        ColumnsPaginatedBookView.prototype.checkForFixedScrollWidth = function () {
-            // Determine if the scroll width changes when the left position
-            // changes. This differs across browsers and sometimes across
-            // books in the same browser.
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var originalLeft = (body.style.left || "0px").slice(0, -2);
-            var originalScrollWidth = body.scrollWidth;
-            body.style.left = (originalLeft - 1) + "px";
-            this.hasFixedScrollWidth = (body.scrollWidth === originalScrollWidth);
-            body.style.left = originalLeft + "px";
-        };
-        ColumnsPaginatedBookView.prototype.setSize = function () {
-            // any is necessary because CSSStyleDeclaration type does not include
-            // all the vendor-prefixed attributes.
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var width = (BrowserUtilities.getWidth() - this.sideMargin * 2) + "px";
-            body.style.columnWidth = width;
-            body.style.WebkitColumnWidth = width;
-            body.style.MozColumnWidth = width;
-            body.style.columnGap = this.sideMargin * 2 + "px";
-            body.style.WebkitColumnGap = this.sideMargin * 2 + "px";
-            body.style.MozColumnGap = this.sideMargin * 2 + "px";
-            body.style.height = this.height + "px";
-            body.style.width = width;
-            body.style.marginLeft = this.sideMargin + "px";
-            body.style.marginRight = this.sideMargin + "px";
-            body.style.marginTop = "0px";
-            body.style.marginBottom = "0px";
-            this.bookElement.contentDocument.documentElement.style.height = this.height + "px";
-            this.bookElement.style.height = this.height + "px";
-            this.bookElement.style.width = BrowserUtilities.getWidth() + "px";
-            var images = body.querySelectorAll("img");
-            for (var _i = 0, images_3 = images; _i < images_3.length; _i++) {
-                var image = images_3[_i];
-                image.style.maxWidth = width;
-                // Determine how much vertical space there is for the image.
-                var nextElement = image;
-                var totalMargins = 0;
-                while (nextElement !== body) {
-                    var computedStyle = window.getComputedStyle(nextElement);
-                    if (computedStyle.marginTop) {
-                        totalMargins += parseInt(computedStyle.marginTop.slice(0, -2), 10);
-                    }
-                    if (computedStyle.marginBottom) {
-                        totalMargins += parseInt(computedStyle.marginBottom.slice(0, -2), 10);
-                    }
-                    nextElement = nextElement.parentElement;
-                }
-                image.style.maxHeight = (this.height - totalMargins) + "px";
-                // Without this, an image at the end of a resource can end up
-                // with an extra empty column after it.
-                image.style.display = "block";
-                image.style.marginLeft = "auto";
-                image.style.marginRight = "auto";
-            }
-        };
-        ColumnsPaginatedBookView.prototype.stop = function () {
-            document.body.style.overflow = "auto";
-            document.body.style.position = "static";
-            document.body.style.left = "";
-            document.body.style.right = "";
-            document.body.style.top = "";
-            document.body.style.bottom = "";
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            body.style.columnCount = "";
-            body.style.WebkitColumnCount = "";
-            body.style.MozColumnCount = "";
-            body.style.columnGap = "";
-            body.style.WebkitColumnGap = "";
-            body.style.MozColumnGap = "";
-            body.style.columnFill = "";
-            body.style.WebkitColumnFill = "";
-            body.style.MozColumnFill = "";
-            body.style.overflow = "";
-            body.style.position = "";
-            body.style.columnWidth = "";
-            body.style.WebkitColumnWidth = "";
-            body.style.MozColumnWidth = "";
-            body.style.height = "";
-            body.style.width = "";
-            body.style.marginLeft = "";
-            body.style.marginRight = "";
-            body.style.marginTop = "";
-            body.style.marginBottom = "";
-            this.bookElement.contentDocument.documentElement.style.height = "";
-            this.bookElement.style.height = "";
-            this.bookElement.style.width = "";
-            var images = body.querySelectorAll("img");
-            for (var _i = 0, images_4 = images; _i < images_4.length; _i++) {
-                var image = images_4[_i];
-                image.style.maxWidth = "";
-                image.style.maxHeight = "";
-                image.style.display = "";
-                image.style.marginLeft = "";
-                image.style.marginRight = "";
-            }
-        };
-        /** Returns the total width of the columns that are currently
-            positioned to the left of the iframe viewport. */
-        ColumnsPaginatedBookView.prototype.getLeftColumnsWidth = function () {
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-            var isXML = this.bookElement.src.indexOf(".xml") !== -1;
-            if (isFirefox && isXML) {
-                // Feedbooks epubs have resources with .xml file extensions for historical
-                // reasons. Firefox handles these differently than XHTML files, and setting
-                // a left position as well as overflow:hidden causes the pages to be blank.
-                return body.scrollLeft;
-            }
-            return -(body.style.left || "0px").slice(0, -2);
-        };
-        /** Returns the total width of the columns that are currently
-            positioned to the right of the iframe viewport. */
-        ColumnsPaginatedBookView.prototype.getRightColumnsWidth = function () {
-            // scrollWidth includes the column in the iframe viewport as well as
-            // columns to the right.
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var scrollWidth = body.scrollWidth;
-            var width = this.getColumnWidth();
-            var rightWidth = scrollWidth + this.sideMargin - width;
-            if (this.hasFixedScrollWidth) {
-                // In some browsers (IE and Firefox with certain books), 
-                // scrollWidth doesn't change when some columns
-                // are off to the left, so we need to subtract them.
-                var leftWidth = this.getLeftColumnsWidth();
-                rightWidth = Math.max(0, rightWidth - leftWidth);
-            }
-            if (rightWidth === this.sideMargin) {
-                return 0;
-            }
-            else {
-                return rightWidth;
-            }
-        };
-        /** Returns the width of one column. */
-        ColumnsPaginatedBookView.prototype.getColumnWidth = function () {
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            return body.offsetWidth + this.sideMargin * 2;
-        };
-        /** Shifts the columns so that the specified width is positioned
-            to the left of the iframe viewport. */
-        ColumnsPaginatedBookView.prototype.setLeftColumnsWidth = function (width) {
-            var body = HTMLUtilities.findRequiredElement(this.bookElement.contentDocument, "body");
-            var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-            var isXML = this.bookElement.src.indexOf(".xml") !== -1;
-            if (isFirefox && isXML) {
-                // Feedbooks epubs have resources with .xml file extensions for historical
-                // reasons. Firefox handles these differently than XHTML files, and setting
-                // a left position as well as overflow:hidden causes the pages to be blank.
-                body.scrollLeft = width;
-            }
-            else {
-                body.style.left = -width + "px";
-            }
-        };
-        /** Returns number in range [0..1) representing the
-            proportion of columns that are currently positioned
-            to the left of the iframe viewport. */
-        ColumnsPaginatedBookView.prototype.getCurrentPosition = function () {
-            var width = this.getColumnWidth();
-            var leftWidth = this.getLeftColumnsWidth();
-            var rightWidth = this.getRightColumnsWidth();
-            var totalWidth = leftWidth + width + rightWidth;
-            return leftWidth / totalWidth;
-        };
-        /** Returns the current 1-indexed page number. */
-        ColumnsPaginatedBookView.prototype.getCurrentPage = function () {
-            return this.getCurrentPosition() * this.getPageCount() + 1;
-        };
-        /** Returns the total number of pages. */
-        ColumnsPaginatedBookView.prototype.getPageCount = function () {
-            var width = this.getColumnWidth();
-            var leftWidth = this.getLeftColumnsWidth();
-            var rightWidth = this.getRightColumnsWidth();
-            var totalWidth = leftWidth + width + rightWidth;
-            return totalWidth / width;
-        };
-        ColumnsPaginatedBookView.prototype.onFirstPage = function () {
-            var leftWidth = this.getLeftColumnsWidth();
-            return (leftWidth <= 0);
-        };
-        ColumnsPaginatedBookView.prototype.onLastPage = function () {
-            var rightWidth = this.getRightColumnsWidth();
-            return (rightWidth <= 0);
-        };
-        ColumnsPaginatedBookView.prototype.goToPreviousPage = function () {
-            var leftWidth = this.getLeftColumnsWidth();
-            var width = this.getColumnWidth();
-            this.setLeftColumnsWidth(leftWidth - width);
-        };
-        ColumnsPaginatedBookView.prototype.goToNextPage = function () {
-            var leftWidth = this.getLeftColumnsWidth();
-            var width = this.getColumnWidth();
-            this.setLeftColumnsWidth(leftWidth + width);
-        };
-        /** Goes to a position specified by a number in the range [0..1].
-            The position should be a number as returned by getCurrentPosition,
-            or 1 to go to the last page. The position will be rounded down so
-            it matches the position of one of the columns. */
-        /** @param position Number in range [0..1] */
-        ColumnsPaginatedBookView.prototype.goToPosition = function (position) {
-            this.setSize();
-            // If the window has changed size since the columns were set up,
-            // we need to reset position so we can determine the new total width.
-            this.setLeftColumnsWidth(0);
-            var width = this.getColumnWidth();
-            var rightWidth = this.getRightColumnsWidth();
-            var totalWidth = width + rightWidth;
-            var newLeftWidth = position * totalWidth;
-            // Round the new left width so it's a multiple of the column width.
-            var roundedLeftWidth = Math.floor(newLeftWidth / width) * width;
-            if (roundedLeftWidth === totalWidth) {
-                // We've gone too far and all the columns are off to the left.
-                // Move one column back into the viewport.
-                roundedLeftWidth = roundedLeftWidth - width;
-            }
-            this.setLeftColumnsWidth(roundedLeftWidth);
-        };
-        ColumnsPaginatedBookView.prototype.goToElement = function (elementId) {
-            var element = this.bookElement.contentDocument.getElementById(elementId);
-            if (element) {
-                // Get the element's position in the iframe, and
-                // round that to figure out the column it's in.
-                // There is a bug in Safari when using getBoundingClientRect
-                // on an element that spans multiple columns. Temporarily
-                // set the element's height to fit it on one column so we
-                // can determine the first column position.
-                var originalHeight = element.style.height;
-                element.style.height = "0";
-                var left = element.getBoundingClientRect().left;
-                var width = this.getColumnWidth();
-                var roundedLeftWidth = Math.floor(left / width) * width;
-                // Restore element's original height.
-                element.style.height = originalHeight;
-                this.setLeftColumnsWidth(roundedLeftWidth);
-            }
-        };
-        return ColumnsPaginatedBookView;
-    }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ColumnsPaginatedBookView;
 });
 define("LocalAnnotator", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** Annotator that stores annotations locally, in the browser. */
-    var LocalAnnotator = (function () {
+    var LocalAnnotator = /** @class */ (function () {
         function LocalAnnotator(config) {
             this.store = config.store;
         }
@@ -2321,33 +2527,299 @@ define("LocalAnnotator", ["require", "exports"], function (require, exports) {
                 });
             });
         };
+        LocalAnnotator.LAST_READING_POSITION = "last-reading-position";
         return LocalAnnotator;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    /** Annotator that stores annotations locally, in the browser. */
     exports.default = LocalAnnotator;
-    LocalAnnotator.LAST_READING_POSITION = "last-reading-position";
 });
-define("app", ["require", "exports", "LocalStorageStore", "ServiceWorkerCacher", "IFrameNavigator", "ColumnsPaginatedBookView", "ScrollingBookView", "BookSettings", "LocalAnnotator"], function (require, exports, LocalStorageStore_1, ServiceWorkerCacher_1, IFrameNavigator_1, ColumnsPaginatedBookView_1, ScrollingBookView_1, BookSettings_1, LocalAnnotator_1) {
+define("MemoryStore", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /** Class that stores key/value pairs in memory. */
+    var MemoryStore = /** @class */ (function () {
+        function MemoryStore() {
+            this.store = {};
+        }
+        MemoryStore.prototype.get = function (key) {
+            var value = this.store[key] || null;
+            return new Promise(function (resolve) { return resolve(value); });
+        };
+        MemoryStore.prototype.set = function (key, value) {
+            this.store[key] = value;
+            return new Promise(function (resolve) { return resolve(); });
+        };
+        return MemoryStore;
+    }());
+    exports.default = MemoryStore;
+});
+define("LocalStorageStore", ["require", "exports", "MemoryStore"], function (require, exports, MemoryStore_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /** Class that stores key/value pairs in localStorage if possible
+        but falls back to an in-memory store. */
+    var LocalStorageStore = /** @class */ (function () {
+        function LocalStorageStore(config) {
+            this.prefix = config.prefix;
+            try {
+                // In some browsers (eg iOS Safari in private mode), 
+                // localStorage exists but throws an exception when
+                // you try to write to it.
+                var testKey = config.prefix + "-" + String(Math.random());
+                window.localStorage.setItem(testKey, "test");
+                window.localStorage.removeItem(testKey);
+                this.fallbackStore = null;
+            }
+            catch (e) {
+                this.fallbackStore = new MemoryStore_1.default();
+            }
+        }
+        LocalStorageStore.prototype.getLocalStorageKey = function (key) {
+            return this.prefix + "-" + key;
+        };
+        LocalStorageStore.prototype.get = function (key) {
+            return __awaiter(this, void 0, void 0, function () {
+                var value;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            value = null;
+                            if (!!this.fallbackStore) return [3 /*break*/, 1];
+                            value = window.localStorage.getItem(this.getLocalStorageKey(key));
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, this.fallbackStore.get(key)];
+                        case 2:
+                            value = _a.sent();
+                            _a.label = 3;
+                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(value); })];
+                    }
+                });
+            });
+        };
+        LocalStorageStore.prototype.set = function (key, value) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!!this.fallbackStore) return [3 /*break*/, 1];
+                            window.localStorage.setItem(this.getLocalStorageKey(key), value);
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, this.fallbackStore.set(key, value)];
+                        case 2:
+                            _a.sent();
+                            _a.label = 3;
+                        case 3: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
+                    }
+                });
+            });
+        };
+        return LocalStorageStore;
+    }());
+    exports.default = LocalStorageStore;
+});
+define("ServiceWorkerCacher", ["require", "exports", "Cacher", "Manifest"], function (require, exports, Cacher_2, Manifest_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /** Class that caches responses using ServiceWorker's Cache API, and optionally
+        falls back to the application cache if service workers aren't available. */
+    var ServiceWorkerCacher = /** @class */ (function () {
+        /** Create a ServiceWorkerCacher. */
+        function ServiceWorkerCacher(config) {
+            this.cacheStatus = Cacher_2.CacheStatus.Uncached;
+            this.statusUpdateCallback = function () { };
+            this.serviceWorkerUrl = config.serviceWorkerUrl || new URL("sw.js", config.manifestUrl.href);
+            this.staticFileUrls = config.staticFileUrls || [];
+            this.store = config.store;
+            this.manifestUrl = config.manifestUrl;
+            var protocol = window.location.protocol;
+            this.areServiceWorkersSupported = !!navigator.serviceWorker && !!window.caches && (protocol === "https:");
+        }
+        ServiceWorkerCacher.prototype.enable = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var err_4;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(this.areServiceWorkersSupported && (this.cacheStatus !== Cacher_2.CacheStatus.Downloaded))) return [3 /*break*/, 4];
+                            this.cacheStatus = Cacher_2.CacheStatus.Downloading;
+                            this.updateStatus();
+                            navigator.serviceWorker.register(this.serviceWorkerUrl.href);
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, this.verifyAndCacheManifest(this.manifestUrl)];
+                        case 2:
+                            _a.sent();
+                            this.cacheStatus = Cacher_2.CacheStatus.Downloaded;
+                            this.updateStatus();
+                            return [3 /*break*/, 4];
+                        case 3:
+                            err_4 = _a.sent();
+                            this.cacheStatus = Cacher_2.CacheStatus.Error;
+                            this.updateStatus();
+                            return [3 /*break*/, 4];
+                        case 4: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.verifyAndCacheManifest = function (manifestUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var urlsToCache, _i, _a, url, promises, _b, promises_1, promise, err_5;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0: return [4 /*yield*/, navigator.serviceWorker.ready];
+                        case 1:
+                            _c.sent();
+                            _c.label = 2;
+                        case 2:
+                            _c.trys.push([2, 7, , 8]);
+                            urlsToCache = [manifestUrl.href];
+                            for (_i = 0, _a = this.staticFileUrls; _i < _a.length; _i++) {
+                                url = _a[_i];
+                                urlsToCache.push(url.href);
+                            }
+                            promises = [this.cacheManifest(manifestUrl), this.cacheUrls(urlsToCache, manifestUrl)];
+                            _b = 0, promises_1 = promises;
+                            _c.label = 3;
+                        case 3:
+                            if (!(_b < promises_1.length)) return [3 /*break*/, 6];
+                            promise = promises_1[_b];
+                            return [4 /*yield*/, promise];
+                        case 4:
+                            _c.sent();
+                            _c.label = 5;
+                        case 5:
+                            _b++;
+                            return [3 /*break*/, 3];
+                        case 6: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
+                        case 7:
+                            err_5 = _c.sent();
+                            return [2 /*return*/, new Promise(function (_, reject) { return reject(err_5); })];
+                        case 8: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.cacheUrls = function (urls, manifestUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var cache;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, window.caches.open(manifestUrl.href)];
+                        case 1:
+                            cache = _a.sent();
+                            return [2 /*return*/, cache.addAll(urls.map(function (url) { return new URL(url, manifestUrl.href).href; }))];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.cacheManifest = function (manifestUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var manifest, promises, _i, promises_2, promise;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, Manifest_2.default.getManifest(manifestUrl, this.store)];
+                        case 1:
+                            manifest = _a.sent();
+                            promises = [this.cacheSpine(manifest, manifestUrl), this.cacheResources(manifest, manifestUrl)];
+                            _i = 0, promises_2 = promises;
+                            _a.label = 2;
+                        case 2:
+                            if (!(_i < promises_2.length)) return [3 /*break*/, 5];
+                            promise = promises_2[_i];
+                            return [4 /*yield*/, promise];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            _i++;
+                            return [3 /*break*/, 2];
+                        case 5: return [2 /*return*/, new Promise(function (resolve) { return resolve(); })];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.cacheSpine = function (manifest, manifestUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var urls, _i, _a, resource;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            urls = [];
+                            for (_i = 0, _a = manifest.spine; _i < _a.length; _i++) {
+                                resource = _a[_i];
+                                if (resource.href) {
+                                    urls.push(resource.href);
+                                }
+                            }
+                            return [4 /*yield*/, this.cacheUrls(urls, manifestUrl)];
+                        case 1: return [2 /*return*/, _b.sent()];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.cacheResources = function (manifest, manifestUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var urls, _i, _a, resource;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            urls = [];
+                            for (_i = 0, _a = manifest.resources; _i < _a.length; _i++) {
+                                resource = _a[_i];
+                                if (resource.href) {
+                                    urls.push(resource.href);
+                                }
+                            }
+                            return [4 /*yield*/, this.cacheUrls(urls, manifestUrl)];
+                        case 1: return [2 /*return*/, _b.sent()];
+                    }
+                });
+            });
+        };
+        ServiceWorkerCacher.prototype.onStatusUpdate = function (callback) {
+            this.statusUpdateCallback = callback;
+            this.updateStatus();
+        };
+        ServiceWorkerCacher.prototype.getStatus = function () {
+            return this.cacheStatus;
+        };
+        ServiceWorkerCacher.prototype.updateStatus = function () {
+            this.statusUpdateCallback(this.cacheStatus);
+        };
+        return ServiceWorkerCacher;
+    }());
+    exports.default = ServiceWorkerCacher;
+});
+define("app", ["require", "exports", "LocalStorageStore", "ServiceWorkerCacher", "IFrameNavigator", "PublisherFont", "SerifFont", "SansFont", "DayTheme", "SepiaTheme", "NightTheme", "ColumnsPaginatedBookView", "ScrollingBookView", "BookSettings", "LocalAnnotator"], function (require, exports, LocalStorageStore_1, ServiceWorkerCacher_1, IFrameNavigator_1, PublisherFont_1, SerifFont_1, SansFont_1, DayTheme_1, SepiaTheme_1, NightTheme_1, ColumnsPaginatedBookView_1, ScrollingBookView_1, BookSettings_1, LocalAnnotator_1) {
     "use strict";
     var _this = this;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var app = function (element, manifestUrl) { return __awaiter(_this, void 0, void 0, function () {
-        var bookStore, cacher, annotator, paginator, scroller, settingsStore, fontSizes, settings;
+        var bookStore, cacher, annotator, publisher, serif, sans, fontSizes, day, sepia, night, paginator, scroller, settingsStore, settings;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     bookStore = new LocalStorageStore_1.default({ prefix: manifestUrl.href });
                     cacher = new ServiceWorkerCacher_1.default({ store: bookStore, manifestUrl: manifestUrl });
                     annotator = new LocalAnnotator_1.default({ store: bookStore });
+                    publisher = new PublisherFont_1.default();
+                    serif = new SerifFont_1.default();
+                    sans = new SansFont_1.default();
+                    fontSizes = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32];
+                    day = new DayTheme_1.default();
+                    sepia = new SepiaTheme_1.default();
+                    night = new NightTheme_1.default();
                     paginator = new ColumnsPaginatedBookView_1.default();
                     scroller = new ScrollingBookView_1.default();
-                    settingsStore = new LocalStorageStore_1.default({ prefix: "all-books" });
-                    fontSizes = [12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32];
+                    settingsStore = new LocalStorageStore_1.default({ prefix: "cassis-reader" });
                     return [4 /*yield*/, BookSettings_1.default.create({
                             store: settingsStore,
-                            bookViews: [paginator, scroller],
+                            bookFonts: [publisher, serif, sans],
                             fontSizesInPixels: fontSizes,
-                            defaultFontSizeInPixels: 16
+                            defaultFontSizeInPixels: 20,
+                            bookThemes: [day, sepia, night],
+                            bookViews: [paginator, scroller]
                         })];
                 case 1:
                     settings = _a.sent();
@@ -2358,6 +2830,12 @@ define("app", ["require", "exports", "LocalStorageStore", "ServiceWorkerCacher",
                             cacher: cacher,
                             settings: settings,
                             annotator: annotator,
+                            publisher: publisher,
+                            serif: serif,
+                            sans: sans,
+                            day: day,
+                            sepia: sepia,
+                            night: night,
                             paginator: paginator,
                             scroller: scroller
                         })];
@@ -2365,24 +2843,30 @@ define("app", ["require", "exports", "LocalStorageStore", "ServiceWorkerCacher",
             }
         });
     }); };
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = app;
 });
-define("index", ["require", "exports", "Cacher", "BookSettings", "MemoryStore", "LocalStorageStore", "ApplicationCacheCacher", "ServiceWorkerCacher", "LocalAnnotator", "ColumnsPaginatedBookView", "ScrollingBookView", "EventHandler", "IFrameNavigator"], function (require, exports, Cacher_4, BookSettings_2, MemoryStore_2, LocalStorageStore_2, ApplicationCacheCacher_2, ServiceWorkerCacher_2, LocalAnnotator_2, ColumnsPaginatedBookView_2, ScrollingBookView_2, EventHandler_2, IFrameNavigator_2) {
+define("index", ["require", "exports", "Cacher", "BookSettings", "MemoryStore", "LocalStorageStore", "ServiceWorkerCacher", "LocalAnnotator", "PublisherFont", "SerifFont", "SansFont", "DayTheme", "SepiaTheme", "NightTheme", "ColumnsPaginatedBookView", "ScrollingBookView", "EventHandler", "IconLib", "IFrameNavigator"], function (require, exports, Cacher_3, BookSettings_2, MemoryStore_2, LocalStorageStore_2, ServiceWorkerCacher_2, LocalAnnotator_2, PublisherFont_2, SerifFont_2, SansFont_2, DayTheme_2, SepiaTheme_2, NightTheme_2, ColumnsPaginatedBookView_2, ScrollingBookView_2, EventHandler_2, IconLib_1, IFrameNavigator_2) {
     "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
-    __export(Cacher_4);
+    Object.defineProperty(exports, "__esModule", { value: true });
+    __export(Cacher_3);
     __export(BookSettings_2);
     __export(MemoryStore_2);
     __export(LocalStorageStore_2);
-    __export(ApplicationCacheCacher_2);
     __export(ServiceWorkerCacher_2);
     __export(LocalAnnotator_2);
+    __export(PublisherFont_2);
+    __export(SerifFont_2);
+    __export(SansFont_2);
+    __export(DayTheme_2);
+    __export(SepiaTheme_2);
+    __export(NightTheme_2);
     __export(ColumnsPaginatedBookView_2);
     __export(ScrollingBookView_2);
     __export(EventHandler_2);
+    __export(IconLib_1);
     __export(IFrameNavigator_2);
 });
 //# sourceMappingURL=webpub-viewer.js.map
