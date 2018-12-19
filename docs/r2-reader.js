@@ -3671,7 +3671,8 @@ function load(config) {
         store: store,
         manifestUrl: webpubManifestUrl,
         serviceWorkerUrl: serviceWorkerUrl,
-        staticFileUrls: staticFileUrls
+        staticFileUrls: staticFileUrls,
+        fallbackBookCacheUrl: config.bookCacheUrl
     });
     var publisher = new _PublisherFont__WEBPACK_IMPORTED_MODULE_3__["default"]();
     var serif = new _SerifFont__WEBPACK_IMPORTED_MODULE_4__["default"]();
