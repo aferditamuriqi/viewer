@@ -3692,11 +3692,7 @@ function load(config) {
         ariaLabel: "Go back to the Catalog"
     };
     if (config.upLinkUrl) {
-        upLink = {
-            url: config.upLinkUrl,
-            label: "Catalog",
-            ariaLabel: "Go back to the Catalog"
-        };
+        upLink = config.upLinkUrl;
     }
     _BookSettings__WEBPACK_IMPORTED_MODULE_11__["default"].create({
         store: settingsStore,
