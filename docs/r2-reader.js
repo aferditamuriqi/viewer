@@ -3666,7 +3666,7 @@ function load(config) {
     var cacher = new _ServiceWorkerCacher__WEBPACK_IMPORTED_MODULE_1__["default"]({
         store: store,
         manifestUrl: webpubManifestUrl,
-        serviceWorkerUrl: new URL("/viewer/serviceWorker.js", window.location.href),
+        serviceWorkerUrl: new URL("sw.js", window.location.href),
         staticFileUrls: staticFileUrls
     });
     var publisher = new _PublisherFont__WEBPACK_IMPORTED_MODULE_3__["default"]();
