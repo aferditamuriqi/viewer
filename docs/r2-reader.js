@@ -3503,12 +3503,12 @@ class ServiceWorkerCacher {
     constructor(config) {
         this.cacheStatus = _Cacher__WEBPACK_IMPORTED_MODULE_0__["CacheStatus"].Uncached;
         this.statusUpdateCallback = () => { };
-        this.serviceWorkerUrl = config.serviceWorkerUrl || new URL("serviceWorker.js", config.manifestUrl.href);
+        this.serviceWorkerUrl = config.serviceWorkerUrl || new URL("sw.js", config.manifestUrl.href);
         this.staticFileUrls = config.staticFileUrls || [];
         this.store = config.store;
         this.manifestUrl = config.manifestUrl;
         const protocol = window.location.protocol;
-        this.areServiceWorkersSupported = !!navigator.serviceWorker && !!window.caches && (protocol === "https:" || window.location.hostname === "localhost");
+        this.areServiceWorkersSupported = !!navigator.serviceWorker && !!window.caches && (protocol === "https:");
     }
     enable() {
         return __awaiter(this, void 0, void 0, function* () {
