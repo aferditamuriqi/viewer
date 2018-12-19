@@ -3663,10 +3663,14 @@ function load(config) {
             new URL("material.js", window.location.href)
         ];
     }
+    var serviceWorkerUrl = new URL("/viewer/sw.js", window.location.href);
+    if (config.serviceWorkerUrl) {
+        serviceWorkerUrl = config.serviceWorkerUrl;
+    }
     var cacher = new _ServiceWorkerCacher__WEBPACK_IMPORTED_MODULE_1__["default"]({
         store: store,
         manifestUrl: webpubManifestUrl,
-        serviceWorkerUrl: new URL("sw.js", window.location.href),
+        serviceWorkerUrl: serviceWorkerUrl,
         staticFileUrls: staticFileUrls
     });
     var publisher = new _PublisherFont__WEBPACK_IMPORTED_MODULE_3__["default"]();
@@ -3686,6 +3690,13 @@ function load(config) {
         label: "Catalog",
         ariaLabel: "Go back to the Catalog"
     };
+    if (config.upLinkUrl) {
+        upLink = {
+            url: config.upLinkUrl,
+            label: "Catalog",
+            ariaLabel: "Go back to the Catalog"
+        };
+    }
     _BookSettings__WEBPACK_IMPORTED_MODULE_11__["default"].create({
         store: settingsStore,
         bookFonts: [publisher, serif, sans],
