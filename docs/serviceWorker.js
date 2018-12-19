@@ -10,7 +10,7 @@ importScripts(
  */
 workbox.precaching.precacheAndRoute([
   {
-    "url": "fetch.js",
+    "url": "https://aferditamuriqi.github.io/viewer/fetch.js",
     "revision": "0c21273fa3d230f74868a77a92473379"
   },
   {
@@ -22,31 +22,31 @@ workbox.precaching.precacheAndRoute([
     "revision": "8fe0c037ec85381b63f6807ec4ba0ac3"
   },
   {
-    "url": "material.css",
+    "url": "https://aferditamuriqi.github.io/viewer/material.css",
     "revision": "10fc85384fccf30acf53236b78d6a8af"
   },
   {
-    "url": "material.js",
+    "url": "https://aferditamuriqi.github.io/viewer/material.js",
     "revision": "51309a9135d076e728da506578ecadcc"
   },
   {
-    "url": "r2-reader.css",
+    "url": "https://aferditamuriqi.github.io/viewer/r2-reader.css",
     "revision": "64bb7e53026d79bd5ad44c2ed533d04c"
   },
   {
-    "url": "r2-reader.js",
+    "url": "https://aferditamuriqi.github.io/viewer/r2-reader.js",
     "revision": "52d1d2c7454feb940cf9caaa9bd0e34b"
   },
   {
-    "url": "readium-css/ReadiumCSS-after.css",
+    "url": "https://aferditamuriqi.github.io/viewer/readium-css/ReadiumCSS-after.css",
     "revision": "3099be111f1731f947145310622500ae"
   },
   {
-    "url": "readium-css/ReadiumCSS-before.css",
+    "url": "https://aferditamuriqi.github.io/viewer/readium-css/ReadiumCSS-before.css",
     "revision": "3b83ba9b8e090af0c8066323661b6014"
   },
   {
-    "url": "readium-css/ReadiumCSS-default.css",
+    "url": "https://aferditamuriqi.github.io/viewer/readium-css/ReadiumCSS-default.css",
     "revision": "a12a9eeb180f804034af108ab220313d"
   }
 ]);
