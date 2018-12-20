@@ -3562,7 +3562,7 @@ nav.navbar {
     height: 100%; } }
 
 #user-settings {
-  width: 311px !important;
+  width: 330px !important;
   height: 327px !important;
   top: 47px !important;
   padding-top: 3px !important;
@@ -3571,7 +3571,7 @@ nav.navbar {
 
 #notes-input {
   width: 240px !important;
-  height: 111px !important;
+  height: 115px !important;
   top: 47px !important;
   padding-top: 3px !important;
   background: transparent !important;
