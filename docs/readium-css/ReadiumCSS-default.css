@@ -29,6 +29,13 @@
 /* STYLES */
 
 /* Typo */
+mark {
+    background: yellow;
+    
+}
+mark.current {
+    background: orange;
+}
 
 body {
   font-size: var(--RS__baseFontSize);

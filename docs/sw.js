@@ -1,4 +1,4 @@
-var CACHE_NAME = "webpub-viewer";
+var CACHE_NAME = "dita-viewer";
 self.addEventListener('activate', function () {
     self.clients.claim();
 });

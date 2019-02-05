@@ -25,3 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let elements = document.querySelectorAll('.sidenav');
   M.Sidenav.init(elements, {'edge': 'left'});
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    let elements = document.querySelectorAll('.tabs');  
+    M.Tabs.init(elements);
+});
